@@ -1,0 +1,115 @@
+---
+sidebar_position: 1
+---
+
+import { Test1, Test2, Test3 } from './文本.jsx'
+
+# 文本
+
+## 创建
+
+使用 `new fabric.Text(string, object)` 方法创建文本
+
+单行文本、不换行、不可编辑
+
+
+<Test1></Test1>
+
+<br />
+
+```js
+const text = new fabric.Text('你好啊', {
+  left: 50,
+  top: 50,
+  fill: '#f00',
+  stroke: 'blue',
+  strokeWidth: 2,
+})
+canvas.add(text)
+```
+
+## 文字居中旋转
+
+居中旋转 **centeredRotation** 默认为true，旋转时以元素的中心点旋转
+
+为false时会以left、top为中心点旋转
+
+试试旋转下面的示例和第一个示例
+
+
+<Test3></Test3>
+
+<br />
+
+```js
+const text = new fabric.Text('你好啊', {
+  left: 50,
+  top: 50,
+  fill: '#f00',
+  stroke: 'blue',
+  strokeWidth: 2,
+  centeredRotation: false
+})
+canvas.add(text)
+```
+
+## 文字居中
+
+以 **left**, **top** 为中心点， **originX**、**originY** 居中
+
+比如 canvas宽300，高150，那么中心点是150、75
+
+<Test2></Test2>
+
+<br />
+
+```js
+const text = new fabric.Text('你好啊', {
+  fill: '#f00',
+  stroke: 'blue',
+  strokeWidth: 2,
+  left: 150,
+  top: 75,
+  originX: 'center',
+  originY: 'center',
+})
+canvas.add(text)
+```
+
+
+## 基础样式
+
+```js
+{
+  top: 40,
+  left: 40,
+  fontSize: 120,
+  fontWeight: 'bold',
+
+  overline: true, // 上划线
+  underline: true, // 下划线
+  linethrough: true, // 删除线
+  width: 200,
+  lineHeight: 1,
+  textAlign: 'center',
+
+  backgroundColor: 'green', // 背景色：绿色
+  fill: 'orange', // 填充色：橙色
+  stroke: '#f6416c', // 边框颜色：粉色
+  strokeWidth: 3, // 边框粗细：3px
+  strokeDashArray: [20, 5, 14], // 边框虚线规则：填充20px 空5px 填充14px 空20px 填充5px ……
+  shadow: '10px 20px 6px rgba(10, 20, 30, 0.4)', // 投影：向右偏移10px，向下偏移20px，羽化6px，投影颜色及透明度
+  transparentCorners: false, // 选中时，角是被填充了。true 空心；false 实心
+  borderColor: '#16f1fc', // 选中时，边框颜色：天蓝
+  borderScaleFactor: 5, // 选中时，边的粗细：5px
+  borderDashArray: [20, 5, 10, 7], // 选中时，虚线边的规则
+  cornerColor: "#a1de93", // 选中时，角的颜色是 青色
+  cornerStrokeColor: 'pink', // 选中时，角的边框的颜色是 粉色
+  cornerStyle: 'circle', // 选中时，角的属性。默认rect 矩形；circle 圆形
+  cornerSize: 20, // 选中时，角的大小为20
+  cornerDashArray: [10, 2, 6], // 选中时，虚线角的规则
+  selectionBackgroundColor: '#7f1300', // 选中时，选框的背景色：朱红
+  padding: 40, // 选中时，选择框离元素的内边距：40px
+  borderOpacityWhenMoving: 0.6, // 当对象活动和移动时，对象控制边界的不透明度  
+}
+```

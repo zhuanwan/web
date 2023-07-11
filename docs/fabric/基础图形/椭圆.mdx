@@ -1,0 +1,38 @@
+---
+sidebar_position: 3
+---
+
+import { Test1 } from './椭圆.jsx'
+
+# 椭圆
+
+## 创建
+
+使用 `new fabric.Ellipse(object)` 方法创建椭圆
+
+## 常用属性
+
+椭圆x轴和y轴方向的半径 **rx** 和 **ry**
+
+其他常用属性和 [矩形 rect](/docs/fabric/基础图形/矩形) 差不多
+
+<Test1></Test1>
+
+<br/>
+
+```js
+let ellipse = new fabric.Ellipse({
+  rx: 100,
+  ry: 50,
+  left: 50,
+  top: 20,
+  fill: '#f00',
+  strokeWidth: 10,
+  stroke: '#0f0',
+})
+
+// 将椭圆添加到画布中
+canvas.add(ellipse)
+```
+
+

@@ -1,0 +1,81 @@
+---
+sidebar_position: 2
+---
+
+import { Test1, Test2, Test3 } from './背景图.jsx'
+
+# 背景图
+
+## 创建
+
+`canvas.setBackgroundImage(image, callback, options)`
+
+<Test1></Test1>
+
+<br />
+
+```js
+canvas.setBackgroundImage('/images/cat.jpg', canvas.renderAll.bind(canvas), {
+  scaleX: 1,
+  scaleY: 1,
+  left: 0,
+  top: 0,
+  angle: 12,
+})
+
+let circle = new fabric.Circle({
+  radius: 50, // 半径
+  left: 50,
+  top: 20,
+  fill: '#f00',
+  strokeWidth: 10,
+  stroke: '#0f0',
+})
+```
+
+## 重复背景图
+
+`canvas.setBackgroundColor({source: imgsrc, repeat: 'repeat'}, callback)`
+
+<Test2></Test2>
+
+<br />
+
+```js
+canvas.setBackgroundColor(
+  {
+    source: '/images/cat2.jpg',
+    repeat: 'repeat',
+  },
+  canvas.renderAll.bind(canvas)
+)
+```
+
+## 重叠影像
+
+一张图覆盖在元素上
+
+`canvas.setOverlayImage(image, callback, options)`
+
+<Test3></Test3>
+
+<br />
+
+```js
+canvas.setOverlayImage('/images/ex1.png', canvas.renderAll.bind(canvas), {
+  scaleX: 1,
+  scaleY: 1,
+  left: 0,
+  top: 0,
+  angle: 12,
+})
+
+let circle = new fabric.Circle({
+  radius: 50, // 半径
+  left: 50,
+  top: 20,
+  fill: '#f00',
+  strokeWidth: 10,
+  stroke: '#0f0',
+})
+```

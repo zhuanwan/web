@@ -1,0 +1,39 @@
+---
+sidebar_position: 2
+---
+
+import { Test1 } from './圆形.jsx'
+
+# 圆形
+
+## 创建
+
+使用 `new fabric.Circle(object)` 方法创建圆形
+
+## 常用属性
+
+**radius** **left** **top**  
+
+可以通过 top 和 left 设置圆形的位置。这两个属性都是设置圆形左上角坐标的，并非圆心位置
+
+其他常用属性和 [矩形 rect](/docs/fabric/基础图形/矩形) 差不多
+
+<Test1></Test1>
+
+<br/>
+
+```js
+let circle = new fabric.Circle({
+  radius: 50, // 半径
+  left: 50,
+  top: 20,
+  fill: '#f00',
+  strokeWidth: 10,
+  stroke: '#0f0',
+})
+
+// 将圆形添加到画布中
+canvas.add(circle)
+```
+
+

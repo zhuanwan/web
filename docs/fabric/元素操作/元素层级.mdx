@@ -1,0 +1,32 @@
+---
+sidebar_position: 7
+---
+
+
+# 元素层级
+
+```js
+canvas.bringToFront(rect) // 移动至顶层
+// 或者
+rect.bringToFront() // 移动至顶层
+
+canvas.sendToBack(triangle) // 移动至底层
+// 或者
+triangle.sendToBack() // 移动至底层
+
+canvas.bringForward(rect) // 往上移一层
+// 或者
+rect.bringForward() // 往上移一层
+
+canvas.sendBackwards(rect) // 往下移一层
+// 或者
+rect.sendBackwards() // 往下移一层
+
+
+canvas.moveTo(rect, 10) // 设置图层层级
+// 或者
+triangle.moveTo(10) // 设置图层层级
+```
+
+
+

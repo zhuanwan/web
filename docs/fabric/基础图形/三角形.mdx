@@ -1,0 +1,49 @@
+---
+sidebar_position: 4
+---
+
+import { Test1 } from './三角形.jsx'
+
+# 三角形
+
+## 创建
+
+使用 `new fabric.Triangle(object)` 方法创建三角形
+
+## 常用属性
+
+三角形的底边 **width** 和高 **height**
+
+其他常用属性和 [矩形 rect](/docs/fabric/基础图形/矩形) 差不多
+
+<Test1></Test1>
+
+<br />
+
+```js
+let triangle1 = new fabric.Triangle({
+  width: 80, // 底边长度
+  height: 100, // 底边到对角的距离
+  left: 10,
+  top: 20,
+  fill: '#f00',
+})
+
+// 选择三角形空白位置的时候无法选中，当perPixelTargetFind设为false后可以选中。默认值是false
+triangle1.perPixelTargetFind = true
+
+let triangle2 = new fabric.Triangle({
+  width: 80, // 底边长度
+  height: 100, // 底边到对角的距离
+  left: 150,
+  top: 20,
+  fill: '#f00',
+  strokeWidth: 20,
+  stroke: '#0f0',
+})
+
+// 将三角形添加到画布中
+canvas.add(triangle1, triangle2)
+
+canvas.selectionFullyContained = true // 只选择完全包含在拖动选择矩形中的形状
+```

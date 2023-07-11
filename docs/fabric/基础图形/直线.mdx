@@ -1,0 +1,33 @@
+---
+sidebar_position: 5
+---
+
+import { Test1 } from './直线.jsx'
+
+# 直线
+
+## 创建
+
+使用 `new fabric.Line(array, object)` 方法创建直线
+
+## 属性
+
+`Line()` 方法接收2个参数。第一个参数是直线起点和终点坐标；第二个参数是描述直线属性的对象。
+
+创建直线时，第二个对象需要设置 stroke 属性，不然直线可能不会在画布上显示出来。
+
+<Test1></Test1>
+
+<br />
+
+```js
+let line = new fabric.Line(
+  [
+    10, 10, // 起始点坐标
+    100, 100, // 结束点坐标
+  ], {
+    stroke: 'red', // 笔触颜色
+    strokeWidth: 10,
+  }
+)
+```

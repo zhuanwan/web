@@ -1,0 +1,30 @@
+---
+sidebar_position: 8
+---
+
+import { Test1 } from './路径.jsx'
+
+# 路径
+
+## 创建
+
+使用 `new fabric.Path(string, object)` 方法创建路径
+
+## 属性
+
+传入一个字符类型的参数。 M 代表起点，L 代表节点。
+
+<Test1></Test1>
+
+<br />
+
+```js
+// 创建路径
+let path = new fabric.Path('M 20 20 L 100 80 L 70 100 z', {
+  fill: 'hotpink', // 填充 亮粉色
+  stroke: 'black', // 描边颜色 黑色
+})
+
+// 将路径添加到画布中
+canvas.add(path)
+```

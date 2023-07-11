@@ -1,0 +1,60 @@
+---
+sidebar_position: 5
+---
+
+import { Test1, Test2 } from './元素禁止事件.jsx'
+
+# 元素禁止事件
+
+## 元素禁止所有事件
+
+两种方法
+
+1、`canvas.selection = false` + `evented: false`
+
+2、`fabric.StaticCanvas` 创建一个不可操作的画布
+
+<Test1></Test1>
+
+<br />
+
+```js
+// highlight-next-line
+canvas.selection = false // 不框选
+
+const draw = (canvas) => {
+  let rect = new fabric.Rect({
+    width: 80,
+    height: 100,
+    left: 10,
+    top: 60,
+    fill: 'rgba(255,0,0,0.4)',
+    // highlight-next-line
+    evented: false,
+  })
+
+  const text = new fabric.Text('我不能点击选中，但是画布可以缩放哦', {
+    fill: '#000',
+    left: 10,
+    top: 20,
+    fontSize: 16,
+    fontWeight: 'bold',
+    // highlight-next-line
+    evented: false,
+  })
+  canvas.add(rect, text)
+}
+```
+<Test2></Test2>
+
+<br />
+
+## 元素禁止部分事件
+
+- evented 禁止点击事件
+- lockMovementX 禁止x轴移动
+- lockMovementY 禁止y轴移动
+- lockRotation 禁止旋转
+- lockScalingX 禁止水平缩放
+- lockScalingY 禁止垂直缩放
+- selectable 禁止选中

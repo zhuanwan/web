@@ -1,0 +1,59 @@
+---
+sidebar_position: 6
+---
+
+import { Test1 } from './折线.jsx'
+
+# 折线
+
+## 创建
+
+使用 `new fabric.Polyline(array, object)` 方法创建折线
+
+## 属性
+
+`Polyline()` 方法接收2个参数，第一个参数是折线的坐标集合；第二个参数是描述折线属性的对象。
+
+坐标集合是一个元素为对象的数组，每个子元素都需要提供 **x** 和 **y** 坐标。
+
+需要注意的是，创建折线时，最好将填充色 fill 设置为透明。折线默认会带有黑色填充色。同时也需要设置描边颜色，不然折线就显示不出来了
+
+<Test1></Test1>
+
+<br />
+
+```js
+// 折线
+let polyline1 = new fabric.Polyline(
+  [
+    { x: 30, y: 30 },
+    { x: 150, y: 100 },
+    { x: 80, y: 100 },
+    { x: 100, y: 30 },
+  ],
+  {
+    fill: 'transparent', // 如果画折线，需要填充透明
+    stroke: '#6639a6', // 线段颜色：紫色
+    strokeWidth: 5, // 线段粗细 5
+  }
+)
+
+// 折线
+let polyline2 = new fabric.Polyline(
+  [
+    { x: 30, y: 30 },
+    { x: 150, y: 100 },
+    { x: 80, y: 100 },
+    { x: 100, y: 30 },
+  ],
+  {
+    left: 140,
+    fill: '#f00', // 如果画折线，需要填充透明
+    stroke: '#6639a6', // 线段颜色：紫色
+    strokeWidth: 5, // 线段粗细 5
+  }
+)
+
+// 将折线添加到画布中
+canvas.add(polyline1, polyline2)
+```

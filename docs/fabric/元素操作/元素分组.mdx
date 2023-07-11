@@ -1,0 +1,56 @@
+---
+sidebar_position: 1
+---
+
+import { Test1, Test2 } from './元素分组.jsx'
+
+# 元素分组
+
+- getObjects() 返回一组中所有对象的数组
+- size() 所有对象的数量
+= contains() 检查特定对象是否在 group 中
+- item() 组中元素
+- forEachObject() 遍历组中对象
+- add() 添加元素对象
+- remove() 删除元素对象
+- fabric.util.object.clone() 克隆
+-- getActiveObject() 拿到活动对象
+-- setActiveObject(sel) 设置活动对象
+-- discardActiveObject() 取消所有的活动对象
+-- new fabric.ActiveSelection(objects, {canvas}) 主动选中哪些元素作为活动对象
+-- canvas.getActiveObject().toActiveSelection() 打散
+
+官方示例 [分组](http://fabricjs.com/manage-selection)
+
+## 示例
+
+<Test1></Test1>
+
+<br />
+
+```js
+let rect = new fabric.Rect({
+  width: 80,
+  height: 100,
+  left: 10,
+  top: 60,
+  fill: 'rgba(255,0,0,0.4)',
+  evented: false,
+})
+
+const text = new fabric.Text('我和长方形可以一起拖动', {
+  fill: '#000',
+  left: 10,
+  top: 20,
+  fontSize: 16,
+  fontWeight: 'bold',
+  evented: false,
+})
+
+const group = new fabric.Group([rect, text])
+canvas.add(group)
+
+group.item(0).set({fill: '#0f0'})
+}
+```
+

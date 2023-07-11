@@ -1,0 +1,58 @@
+---
+sidebar_position: 1
+---
+
+import { Test1 } from './输出JSON.jsx'
+
+# 输出JSON
+
+- JSON.stringify(canvas)
+- canvas.toJSON()
+- canvas.toObject()
+
+`{version: '5.3.0', objects: []}`
+
+## 示例
+
+
+<Test1></Test1>
+
+<br />
+
+```js
+export function Test1() {
+  const canvasRef = useRef(null)
+  const fabricCanvas = useRef(null)
+
+  const draw = (canvas) => {
+    const rect = new fabric.Rect({
+      top: 20,
+      left: 120,
+      width: 60,
+      height: 40,
+      fill: 'transparent',
+      stroke: 'blue'
+    })
+    canvas.add(rect)
+
+    // highlight-start
+    console.log('canvas stringify ', JSON.stringify(canvas))
+    console.log('canvas toJSON', canvas.toJSON())
+    console.log('canvas toObject', canvas.toObject())
+    // highlight-end
+  }
+
+  useEffect(() => {
+    fabricCanvas.current = new fabric.Canvas(canvasRef.current)
+    draw(fabricCanvas.current)
+    return () => {
+      fabricCanvas = null
+    }
+  }, [])
+  return (
+    <div>
+      <canvas ref={canvasRef} style={{ border: '1px solid #ccc' }}></canvas>
+    </div>
+  )
+}
+```

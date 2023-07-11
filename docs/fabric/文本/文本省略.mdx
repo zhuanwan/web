@@ -1,0 +1,93 @@
+---
+sidebar_position: 2
+---
+
+import { Test1 } from './文本省略.jsx'
+
+# 文本省略
+
+## 单行文本 ellipsis 效果
+
+<Test1></Test1>
+
+<br />
+
+```js
+// 文本没有找到框，自定义Text，加上框
+export const FabricText = fabric.util.createClass(fabric.Text, {
+  type: 'border-text', // 添加一个 type 属性
+  // 初始化
+  initialize(text, options) {
+    this.callSuper('initialize', text, options) // 继承
+    return this
+  },
+  _render(ctx) {
+    fabric.Textbox.prototype._render.call(this, ctx)
+    if (this.active) return
+    const padding = this.padding || 2
+    if (this.showTextBoxBorder) {
+      const w = this.width + 2 * padding
+      const h = this.height + 2 * padding
+      const x = -this.width / 2 - padding
+      const y = -this.height / 2 - padding
+      ctx.beginPath()
+      ctx.moveTo(x, y)
+      ctx.lineTo(x + w, y)
+      ctx.lineTo(x + w, y + h)
+      ctx.lineTo(x, y + h)
+      ctx.lineTo(x, y)
+      ctx.closePath()
+      const stroke = ctx.strokeStyle
+      ctx.strokeStyle = this.textboxBorderColor
+      ctx.stroke()
+      ctx.strokeStyle = stroke
+    }
+  },
+})
+
+const draw = (canvas) => {
+  const fullText = '鼠标移上去看看，我是很长很长的文本，我省略了很多字'
+  const text = new fabric.Text(`${fullText.substring(0, 6)}...`, {
+    left: 50,
+    top: 50,
+    fontSize: 14,
+    fill: '#f00',
+    fullText,
+    shouldTitleSuspend: 1,
+  })
+  canvas.add(text)
+}
+
+// 这里是自定义的 Text
+const nameTip = new FabricText('', {
+  fill: '#333',
+  fontSize: 14,
+  backgroundColor: '#fff',
+  padding: 2,
+  showTextBoxBorder: true,
+  textboxBorderColor: '#333',
+  left: -9999,
+  top: -9999,
+})
+canvas.add(nameTip)
+
+// 当鼠标移上去的时候
+canvas.on('mouse:over', (opt) => {
+  const { target, e } = opt
+  if (target && target.shouldTitleSuspend === 1) {
+    const p = canvas.getPointer(e)
+    nameTip.set({
+      left: p.x,
+      top: p.y + 20,
+      text: target.fullText,
+    })
+    nameTip.bringToFront()
+    canvas.renderAll()
+  }
+})
+
+canvas.on('mouse:out', () => {
+  nameTip.set({ left: -9999, top: -9999 })
+  canvas.renderAll()
+})
+```

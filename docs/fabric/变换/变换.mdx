@@ -1,0 +1,51 @@
+---
+sidebar_position: 4
+---
+
+import { Test1 } from './变换.jsx'
+
+# 变换
+
+## 旋转
+
+**angle**
+
+## 缩放
+
+**scaleX** **scaleY**
+
+## 平移
+
+**translateX** **translateY**
+
+## 视窗变换
+
+`canvas.setViewportTransform([1, 0, 0, 1, 0, 0])`
+
+`ctx.transform(a, b, c, d, e, f)`
+
+- a: 水平缩放（x轴方向）
+- b: 水平倾斜（x轴方向）
+- c: 垂直倾斜（y轴方向）
+- d: 垂直缩放（y轴方向）
+- e: 水平移动（x轴方向）
+- f: 垂直移动（y轴方向）
+
+矩阵
+
+```js
+[
+  a, c, e,
+  b, d, f,
+  0, 0, 1,
+]
+```
+
+## 示例
+<Test1></Test1>
+
+<br />
+
+```js
+```
+

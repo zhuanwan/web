@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拓扑图</title>
+  <script src="../../utils/stats.min.js"></script>
+  <script src="../../utils/fabric.js"></script>
+
+</head>
+
+<body style="background-color: #000628;margin:0;position:relative;">
+ 
+  <canvas id="canvas" width="500" height="500" style="border: 1px solid blue"></canvas>
+  
+  <img id="ammeter" src="./images/ammeter.png" style="display:none" />
+  <img id="piles" src="./images/piles.png" style="display:none" />
+  <img id="pv" src="./images/pv.png" style="display:none" />
+  <img id="root" src="./images/root.png" style="display:none" />
+  <img id="watermeter" src="./images/watermeter.png" style="display:none" />
+
+  <button id="test" style="position: fixed;right:20%;top:10%;">测试一个顶点</button>
+  <div id="stats-output" style="position: fixed;left:3%;top:3%;"></div>
+  <div style="position: fixed;left:3%;top:10%;color:#fff;z-index: -1;">点击机器运行动画，再次点击暂停，开关控制是否动画</div>
+</body>
+
+
+<script src="./index2.js" type="module"></script>
+
+</html>
