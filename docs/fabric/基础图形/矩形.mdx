@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+---
+
+# 矩形
+
+## 创建
+
+使用 `new fabric.Rect(object)` 方法创建矩形
+
+## 宽高
+
+**width height**
+
+```js
+const rect = new fabric.Rect({
+  width: 60, // 矩形宽度
+  height: 40, // 矩形高度
+})
+// 或者
+const rect = new fabric.Rect()
+rect.width = 60 // 设置矩形宽度
+rect.height = 40 // 设置矩形高度
+```
+
+## 位置
+
+**top left**
+
+```js
+const rect = new fabric.Rect({
+  top: 20, // 距离画布顶部距离
+  left: 30, // 距离画布左侧距离
+  width: 60,
+  height: 40,
+})
+```
+
+```mdx-code-block
+import { Test1 } from './矩形.jsx'
+
+<Test1 />
+```
+
+777777777
