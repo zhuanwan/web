@@ -1,3 +1,20 @@
+---
+sidebar_position: 5
+---
+
+import { Test1 } from './文本边框.jsx'
+
+# 文本边框
+
+## 自定义边框
+
+<Test1></Test1>
+
+<br />
+
+```js
+import { fabric } from 'fabric';
+
 export const FabricText = fabric.util.createClass(fabric.Text, {
     type: 'border-text', // 添加一个 type 属性
     // 初始化
@@ -28,3 +45,4 @@ export const FabricText = fabric.util.createClass(fabric.Text, {
         }
     },
 });
+```
