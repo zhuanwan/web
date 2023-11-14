@@ -1,8 +1,0 @@
-{
-  "label": "序列化和反序列化",
-  "position": 6,
-  "link": {
-    "type": "generated-index",
-    "description": "序列化就是将画布的内容转成 JSON，方便保存。但 Fabric.js 除了能将画布转成字符串，还可以输出 base64 和 svg"
-  }
-}
