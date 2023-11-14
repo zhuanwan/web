@@ -1,0 +1,46 @@
+/* 滚动条整体 */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* 两个滚动条交接处 -- x轴和y轴 */
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgb(0 0 0 / 20%);
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+    background: #ededed;
+    border-radius: 10px;
+}
+
+/* 细条滚动条 */
+.min-scroll {
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #999;
+        border-radius: 4px;
+        box-shadow: inset 0 0 5px rgb(0 0 0 / 20%);
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+}
