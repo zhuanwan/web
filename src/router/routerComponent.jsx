@@ -28,7 +28,7 @@ const getBrowserRouter = (r) => {
   return br
 }
 
-const router = createBrowserRouter(getBrowserRouter(routes))
+const router = createBrowserRouter(getBrowserRouter(routes), { basename: '/web' })
 
 const routerComponent = () => {
   return <RouterProvider router={router} fallbackElement={<p>Initial Load...</p>} />
