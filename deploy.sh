@@ -7,7 +7,7 @@ set -e
 yarn run build
 
 # 进入生成的文件夹
-cd build
+cd dist
 
 git init
 git add -A
