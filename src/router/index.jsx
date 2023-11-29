@@ -2,6 +2,8 @@ import Loadable from '@loadable/component'
 
 import Loading from '@/components/loading'
 
+import fabric from './modules/fabric'
+
 const NoMatch = Loadable(() => import('@/pages/404'), {
   fallback: <Loading />,
 })
@@ -25,6 +27,7 @@ const routes = [
       },
     ],
   },
+  ...fabric,
   { path: '*', element: <NoMatch /> },
 ]
 
