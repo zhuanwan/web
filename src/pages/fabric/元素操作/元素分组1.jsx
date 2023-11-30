@@ -73,7 +73,7 @@ export default function Test1() {
     fabricCanvas.current = new fabric.Canvas(canvasRef.current)
     init(fabricCanvas.current)
     return () => {
-      fabricCanvas = null
+      fabricCanvas.current = null
     }
   }, [])
   return (
