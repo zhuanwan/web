@@ -20,9 +20,6 @@ const Fabric5 = Loadable(() => import('@/pages/fabric/变换/变换1'), {
 const Fabric6 = Loadable(() => import('@/pages/fabric/图片/图片1'), {
   fallback: <Loading />,
 })
-const Fabric7 = Loadable(() => import('@/pages/fabric/图片/图片2'), {
-  fallback: <Loading />,
-})
 const Fabric8 = Loadable(() => import('@/pages/fabric/图片/图片3'), {
   fallback: <Loading />,
 })
@@ -63,10 +60,6 @@ const routes = [
   {
     path: '/fabric/图片/图片1',
     element: <Fabric6 />,
-  },
-  {
-    path: '/fabric/图片/图片2',
-    element: <Fabric7 />,
   },
   {
     path: '/fabric/图片/图片3',

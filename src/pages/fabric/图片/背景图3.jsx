@@ -13,7 +13,7 @@ export default function Test1() {
       scaleY: 1,
       left: 0,
       top: 0,
-      angle: 12,
+      angle: 45,
     })
 
     const circle = new fabric.Circle({
