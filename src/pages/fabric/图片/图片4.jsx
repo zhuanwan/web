@@ -1,46 +1,23 @@
 import React, { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 
-export function Test1() {
+import catImg from '@/static/imgs/cat.jpg'
+
+export default function Test1() {
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 
   const draw = (canvas) => {
-    fabric.Image.fromURL('/images/cat.jpg', (img) => {
-      // 设置背景图， 将背景图的宽高设置成画布的宽高
-      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-        scaleX: canvas.width / img.width,
-        scaleY: canvas.height / img.height,
-        left: 0,
-        top: 0,
-      })
-
-      const rect = new fabric.Rect({
-        width: 80,
-        height: 100,
-        left: 10,
-        top: 20,
-        fill: 'rgba(255,0,0,0.4)',
-        name: 'rect',
-      })
-
-      rect.set({
-        borderColor: 'red', // 边框颜色
-        cornerColor: 'green', // 控制角颜色
-        cornerSize: 10, // 控制角大小
-        transparentCorners: false, // 控制角填充色不透明
-        // transparentCorners: true, // 控制角填充色透明
-        selectionBackgroundColor: 'orange', // 选中后，背景色变橙色
-      })
-
-      // rect.hasBorders = false // 取消边框
-      // rect.hasControls = false // 禁止控制角
-      canvas.hoverCursor = 'wait' // 设置等待指针
-
-      // 将rect添加到画布中
-      canvas.add(rect)
-
-      // canvas.setActiveObject(rect) // 选中rect
+    fabric.Image.fromURL(catImg, (img) => {
+      // 添加滤镜
+      img.filters.push(
+        new fabric.Image.filters.Grayscale(),
+        new fabric.Image.filters.Sepia(), // 色偏
+        new fabric.Image.filters.Brightness({ brightness: 0.1 }) // 亮度
+      )
+      // 图片加载完成之后，应用滤镜效果
+      img.applyFilters()
+      canvas.add(img)
     })
   }
 
@@ -82,6 +59,11 @@ export function Test1() {
   }
 
   useEffect(() => {
+    const w = document.documentElement.clientWidth
+    const h = document.documentElement.clientHeight
+    canvasRef.current.width = w
+    canvasRef.current.height = h
+
     fabricCanvas.current = new fabric.Canvas(canvasRef.current)
     init(fabricCanvas.current)
     return () => {
@@ -90,7 +72,7 @@ export function Test1() {
   }, [])
   return (
     <div>
-      <canvas ref={canvasRef} style={{ border: '1px solid #ccc' }} width={300} height={200} />
+      <canvas ref={canvasRef} />
     </div>
   )
 }

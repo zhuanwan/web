@@ -1,36 +1,20 @@
 import React, { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 
-export default function Test1() {
-  const width = document.documentElement.clientWidth
-  const height = document.documentElement.clientHeight
+import cat2Img from '@/static/imgs/cat2.jpg'
 
+export default function Test1() {
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 
   const draw = (canvas) => {
-    const rect = new fabric.Rect({
-      width: 80,
-      height: 100,
-      left: 10,
-      top: 60,
-      fill: 'rgba(255,0,0,0.4)',
-      evented: false,
-    })
-
-    const text = new fabric.Text('我和长方形可以一起拖动', {
-      fill: '#000',
-      left: 10,
-      top: 20,
-      fontSize: 16,
-      fontWeight: 'bold',
-      evented: false,
-    })
-
-    const group = new fabric.Group([rect, text])
-    canvas.add(group)
-
-    group.item(0).set({ fill: '#0f0' })
+    canvas.setBackgroundColor(
+      {
+        source: cat2Img,
+        repeat: 'repeat',
+      },
+      canvas.renderAll.bind(canvas)
+    )
   }
 
   const init = (canvas) => {
@@ -45,7 +29,7 @@ export default function Test1() {
     canvas.clear()
     canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
 
-    canvas.selection = false
+    draw(canvas)
 
     canvas.on('mouse:wheel', (opt) => {
       const delta = opt.e.deltaY // 滚轮，向上滚一下是 -100，向下滚一下是 100
@@ -68,16 +52,23 @@ export default function Test1() {
       opt.e.preventDefault()
       opt.e.stopPropagation()
     })
-
-    draw(canvas)
   }
 
   useEffect(() => {
+    const w = document.documentElement.clientWidth
+    const h = document.documentElement.clientHeight
+    canvasRef.current.width = w
+    canvasRef.current.height = h
+
     fabricCanvas.current = new fabric.Canvas(canvasRef.current)
     init(fabricCanvas.current)
     return () => {
       fabricCanvas.current = null
     }
   }, [])
-  return <canvas ref={canvasRef} width={width} height={height} />
+  return (
+    <div>
+      <canvas ref={canvasRef} />
+    </div>
+  )
 }

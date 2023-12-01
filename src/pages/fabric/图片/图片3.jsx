@@ -1,29 +1,24 @@
 import React, { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 
-export default function Test2() {
+import catImg from '@/static/imgs/cat.jpg'
+import yaImg from '@/static/imgs/ya.jpg'
+
+export default function Test1() {
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 
   const draw = (canvas) => {
-    const rect = new fabric.Rect({
-      width: 80,
-      height: 100,
-      left: 10,
-      top: 60,
-      fill: 'rgba(255,0,0,0.4)',
-      evented: false,
+    fabric.Image.fromURL(catImg, (img) => {
+      img.set({ left: 30, top: 20 })
+      canvas.add(img)
     })
 
-    const text = new fabric.Text('我不能点击选中，画布也不可以缩放哦', {
-      fill: '#000',
-      left: 10,
-      top: 20,
-      fontSize: 16,
-      fontWeight: 'bold',
-      evented: false,
+    fabric.Image.fromURL(yaImg, (img) => {
+      canvas.add(img)
+      // 图片置于最底层
+      img.sendToBack()
     })
-    canvas.add(rect, text)
   }
 
   const init = (canvas) => {
@@ -38,7 +33,7 @@ export default function Test2() {
     canvas.clear()
     canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
 
-    canvas.selection = false
+    draw(canvas)
 
     canvas.on('mouse:wheel', (opt) => {
       const delta = opt.e.deltaY // 滚轮，向上滚一下是 -100，向下滚一下是 100
@@ -61,12 +56,15 @@ export default function Test2() {
       opt.e.preventDefault()
       opt.e.stopPropagation()
     })
-
-    draw(canvas)
   }
 
   useEffect(() => {
-    fabricCanvas.current = new fabric.StaticCanvas(canvasRef.current)
+    const w = document.documentElement.clientWidth
+    const h = document.documentElement.clientHeight
+    canvasRef.current.width = w
+    canvasRef.current.height = h
+
+    fabricCanvas.current = new fabric.Canvas(canvasRef.current)
     init(fabricCanvas.current)
     return () => {
       fabricCanvas.current = null
@@ -74,7 +72,7 @@ export default function Test2() {
   }, [])
   return (
     <div>
-      <canvas ref={canvasRef} style={{ border: '1px solid #ccc' }} width={300} height={200} />
+      <canvas ref={canvasRef} />
     </div>
   )
 }

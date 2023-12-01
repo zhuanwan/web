@@ -2,9 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 
 export default function Test1() {
-  const width = document.documentElement.clientWidth
-  const height = document.documentElement.clientHeight
-
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 
@@ -18,7 +15,7 @@ export default function Test1() {
       evented: false,
     })
 
-    const text = new fabric.Text('我和长方形可以一起拖动', {
+    const text = new fabric.Text('我不能点击选中，但是鼠标滚轮滑动，画布可以缩放哦', {
       fill: '#000',
       left: 10,
       top: 20,
@@ -26,11 +23,7 @@ export default function Test1() {
       fontWeight: 'bold',
       evented: false,
     })
-
-    const group = new fabric.Group([rect, text])
-    canvas.add(group)
-
-    group.item(0).set({ fill: '#0f0' })
+    canvas.add(rect, text)
   }
 
   const init = (canvas) => {
@@ -73,11 +66,15 @@ export default function Test1() {
   }
 
   useEffect(() => {
+    const w = document.documentElement.clientWidth
+    const h = document.documentElement.clientHeight
+    canvasRef.current.width = w
+    canvasRef.current.height = h
     fabricCanvas.current = new fabric.Canvas(canvasRef.current)
     init(fabricCanvas.current)
     return () => {
       fabricCanvas.current = null
     }
   }, [])
-  return <canvas ref={canvasRef} width={width} height={height} />
+  return <canvas ref={canvasRef} />
 }
