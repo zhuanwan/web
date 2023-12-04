@@ -1,0 +1,79 @@
+import React, { useEffect, useRef } from 'react'
+import { fabric } from 'fabric'
+
+export default function Test1() {
+  const canvasRef = useRef(null)
+  const fabricCanvas = useRef(null)
+
+  const draw = (canvas) => {
+    const line = new fabric.Line(
+      [
+        10,
+        10, // 起始点坐标
+        100,
+        100, // 结束点坐标
+      ],
+      {
+        stroke: 'red', // 笔触颜色
+        strokeWidth: 10,
+      }
+    )
+    // 将直线添加到画布中
+    canvas.add(line)
+  }
+
+  const init = (canvas) => {
+    if (!canvas) {
+      return
+    }
+    // 重置上一次的canvas
+    canvas.off('mouse:down')
+    canvas.off('mouse:wheel')
+    canvas.off('mouse:move')
+    canvas.off('mouse:up')
+    canvas.clear()
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
+
+    draw(canvas)
+
+    canvas.on('mouse:wheel', (opt) => {
+      const delta = opt.e.deltaY // 滚轮，向上滚一下是 -100，向下滚一下是 100
+      let zoom = canvas.getZoom() // 获取画布当前缩放值
+      zoom *= 0.999 ** delta
+      if (zoom > 20) zoom = 20
+      if (zoom < 0.01) zoom = 0.01
+
+      // 以左上角为原点
+      canvas.setZoom(zoom)
+
+      // 以鼠标所在位置为原点缩放
+      // canvas.zoomToPoint(
+      //   {
+      //     x: opt.e.offsetX,
+      //     y: opt.e.offsetY,
+      //   },
+      //   zoom
+      // )
+      opt.e.preventDefault()
+      opt.e.stopPropagation()
+    })
+  }
+
+  useEffect(() => {
+    const w = document.documentElement.clientWidth
+    const h = document.documentElement.clientHeight
+    canvasRef.current.width = w
+    canvasRef.current.height = h
+
+    fabricCanvas.current = new fabric.Canvas(canvasRef.current)
+    init(fabricCanvas.current)
+    return () => {
+      fabricCanvas.current = null
+    }
+  }, [])
+  return (
+    <div>
+      <canvas ref={canvasRef} />
+    </div>
+  )
+}

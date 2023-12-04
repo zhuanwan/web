@@ -35,6 +35,57 @@ const Fabric11 = Loadable(() => import('@/pages/fabric/图片/背景图2'), {
 const Fabric12 = Loadable(() => import('@/pages/fabric/图片/背景图3'), {
   fallback: <Loading />,
 })
+const Fabric13 = Loadable(() => import('@/pages/fabric/基础图形/三角形1'), {
+  fallback: <Loading />,
+})
+const Fabric14 = Loadable(() => import('@/pages/fabric/基础图形/圆形1'), {
+  fallback: <Loading />,
+})
+const Fabric15 = Loadable(() => import('@/pages/fabric/基础图形/多边形1'), {
+  fallback: <Loading />,
+})
+const Fabric16 = Loadable(() => import('@/pages/fabric/基础图形/折线1'), {
+  fallback: <Loading />,
+})
+const Fabric17 = Loadable(() => import('@/pages/fabric/基础图形/椭圆1'), {
+  fallback: <Loading />,
+})
+const Fabric18 = Loadable(() => import('@/pages/fabric/基础图形/直线1'), {
+  fallback: <Loading />,
+})
+const Fabric21 = Loadable(() => import('@/pages/fabric/基础图形/矩形1'), {
+  fallback: <Loading />,
+})
+const Fabric22 = Loadable(() => import('@/pages/fabric/基础图形/矩形2'), {
+  fallback: <Loading />,
+})
+const Fabric23 = Loadable(() => import('@/pages/fabric/基础图形/矩形3'), {
+  fallback: <Loading />,
+})
+const Fabric24 = Loadable(() => import('@/pages/fabric/基础图形/矩形4'), {
+  fallback: <Loading />,
+})
+const Fabric25 = Loadable(() => import('@/pages/fabric/基础图形/矩形5'), {
+  fallback: <Loading />,
+})
+const Fabric26 = Loadable(() => import('@/pages/fabric/基础图形/矩形6'), {
+  fallback: <Loading />,
+})
+const Fabric27 = Loadable(() => import('@/pages/fabric/基础图形/矩形7'), {
+  fallback: <Loading />,
+})
+const Fabric28 = Loadable(() => import('@/pages/fabric/基础图形/矩形8'), {
+  fallback: <Loading />,
+})
+const Fabric29 = Loadable(() => import('@/pages/fabric/基础图形/矩形9'), {
+  fallback: <Loading />,
+})
+const Fabric30 = Loadable(() => import('@/pages/fabric/基础图形/矩形10'), {
+  fallback: <Loading />,
+})
+const Fabric31 = Loadable(() => import('@/pages/fabric/基础图形/路径1'), {
+  fallback: <Loading />,
+})
 
 const routes = [
   {
@@ -80,6 +131,74 @@ const routes = [
   {
     path: '/fabric/图片/背景图3',
     element: <Fabric12 />,
+  },
+  {
+    path: '/fabric/基础图形/三角形1',
+    element: <Fabric13 />,
+  },
+  {
+    path: '/fabric/基础图形/圆形1',
+    element: <Fabric14 />,
+  },
+  {
+    path: '/fabric/基础图形/多边形1',
+    element: <Fabric15 />,
+  },
+  {
+    path: '/fabric/基础图形/折线1',
+    element: <Fabric16 />,
+  },
+  {
+    path: '/fabric/基础图形/椭圆1',
+    element: <Fabric17 />,
+  },
+  {
+    path: '/fabric/基础图形/直线1',
+    element: <Fabric18 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形1',
+    element: <Fabric21 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形2',
+    element: <Fabric22 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形3',
+    element: <Fabric23 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形4',
+    element: <Fabric24 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形5',
+    element: <Fabric25 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形6',
+    element: <Fabric26 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形7',
+    element: <Fabric27 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形8',
+    element: <Fabric28 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形9',
+    element: <Fabric29 />,
+  },
+  {
+    path: '/fabric/基础图形/矩形10',
+    element: <Fabric30 />,
+  },
+  {
+    path: '/fabric/基础图形/路径1',
+    element: <Fabric31 />,
   },
 ]
 
