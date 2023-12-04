@@ -2,6 +2,7 @@ import Loadable from '@loadable/component'
 
 import Loading from '@/components/loading'
 
+import postMessage from './modules/post-message'
 import fabric from './modules/fabric'
 
 const NoMatch = Loadable(() => import('@/pages/404'), {
@@ -27,6 +28,7 @@ const routes = [
       },
     ],
   },
+  ...postMessage,
   ...fabric,
   { path: '*', element: <NoMatch /> },
 ]

@@ -1,0 +1,26 @@
+.page {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  grid-gap: 20px;
+  .item {
+    display: flex;
+    font-size: 30px;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  .progress-bar {
+    position: absolute;
+    right: 30%;
+    bottom: 30%;
+    left: 30%;
+  }
+}
