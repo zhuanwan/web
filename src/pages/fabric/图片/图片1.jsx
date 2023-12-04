@@ -3,7 +3,7 @@ import { fabric } from 'fabric'
 
 import catImg from '@/static/imgs/cat.jpg'
 
-export default function Test1() {
+export default function Component() {
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 

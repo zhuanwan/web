@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 
-export default function Test1() {
+export default function Component() {
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 

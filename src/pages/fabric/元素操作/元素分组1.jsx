@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 
-export default function Test1() {
-  const width = document.documentElement.clientWidth
-  const height = document.documentElement.clientHeight
-
+export default function Component() {
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 
@@ -73,11 +70,16 @@ export default function Test1() {
   }
 
   useEffect(() => {
+    const w = document.documentElement.clientWidth
+    const h = document.documentElement.clientHeight
+    canvasRef.current.width = w
+    canvasRef.current.height = h
+
     fabricCanvas.current = new fabric.Canvas(canvasRef.current)
     init(fabricCanvas.current)
     return () => {
       fabricCanvas.current = null
     }
   }, [])
-  return <canvas ref={canvasRef} width={width} height={height} />
+  return <canvas ref={canvasRef} />
 }

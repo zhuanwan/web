@@ -2,6 +2,9 @@ import Loadable from '@loadable/component'
 
 import Loading from '@/components/loading'
 
+const Fabric0 = Loadable(() => import('@/pages/fabric/元素操作/元素定位1'), {
+  fallback: <Loading />,
+})
 const Fabric1 = Loadable(() => import('@/pages/fabric/元素操作/元素分组1'), {
   fallback: <Loading />,
 })
@@ -88,6 +91,10 @@ const Fabric31 = Loadable(() => import('@/pages/fabric/基础图形/路径1'), {
 })
 
 const routes = [
+  {
+    path: '/fabric/元素操作/元素定位1',
+    element: <Fabric0 />,
+  },
   {
     path: '/fabric/元素操作/元素分组1',
     element: <Fabric1 />,
