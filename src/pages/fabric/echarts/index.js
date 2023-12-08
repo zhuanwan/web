@@ -24,17 +24,12 @@ function App() {
 
   return (
     <div className={styles.box}>
-      <div className={styles.header}>我是头部</div>
-      <div className={styles.content}>
-        <div className={styles.left}>
-          <div style={{ margin: 30, overflow: 'hidden' }}>
-            <Button onClick={renderData} type="primary">
-              点击点击
-            </Button>
-          </div>
-        </div>
-        <div className={styles.right} ref={rootRef} />
+      <div className={styles.header}>
+        <Button onClick={renderData} type="primary">
+          点击点击
+        </Button>
       </div>
+      <div className={styles.content} ref={rootRef} />
     </div>
   )
 }
