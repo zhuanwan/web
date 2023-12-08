@@ -22,7 +22,7 @@ const Component = () => {
       JSON.stringify({
         load: 'done',
       }),
-      '*'
+      '*' // 这里是主页面域名
     )
   }
 
