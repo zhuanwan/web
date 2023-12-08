@@ -6,6 +6,18 @@ export default function Component() {
   const fabricCanvas = useRef(null)
 
   const draw = (canvas) => {
+    // 创建矩形
+    const rect = new fabric.Rect({
+      top: 0, // 距离画布顶部距离
+      left: 0, // 距离画布左侧距离
+      width: 300, // 矩形宽度
+      height: 40, // 矩形高度
+      stroke: 'blue',
+      fill: 'transparent',
+    })
+
+    // 将矩形添加到画布中
+    canvas.add(rect)
     const text = new fabric.Textbox('我可以居中', {
       fill: '#f00',
       stroke: 'blue',

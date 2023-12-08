@@ -2,6 +2,9 @@ import Loadable from '@loadable/component'
 
 import Loading from '@/components/loading'
 
+const FabricEchartsDemo = Loadable(() => import('@/pages/fabric/echarts'), {
+  fallback: <Loading />,
+})
 const Fabric0 = Loadable(() => import('@/pages/fabric/元素操作/元素定位1'), {
   fallback: <Loading />,
 })
@@ -119,6 +122,10 @@ const Fabric48 = Loadable(() => import('@/pages/fabric/文本/文本边框1'), {
 })
 
 const routes = [
+  {
+    path: '/fabric/echarts-demo',
+    element: <FabricEchartsDemo />,
+  },
   {
     path: '/fabric/元素操作/元素定位1',
     element: <Fabric0 />,

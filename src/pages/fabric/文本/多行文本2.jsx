@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 
-export default function Test2() {
+export default function Component() {
   const canvasRef = useRef(null)
   const fabricCanvas = useRef(null)
 
@@ -27,6 +27,8 @@ export default function Test2() {
     canvas.clear()
     canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
 
+    draw(canvas)
+
     canvas.on('mouse:wheel', (opt) => {
       const delta = opt.e.deltaY // 滚轮，向上滚一下是 -100，向下滚一下是 100
       let zoom = canvas.getZoom() // 获取画布当前缩放值
@@ -48,8 +50,6 @@ export default function Test2() {
       opt.e.preventDefault()
       opt.e.stopPropagation()
     })
-
-    draw(canvas)
   }
 
   useEffect(() => {
@@ -58,11 +58,15 @@ export default function Test2() {
     canvasRef.current.width = w
     canvasRef.current.height = h
 
-    fabricCanvas.current = new fabric.StaticCanvas(canvasRef.current)
+    fabricCanvas.current = new fabric.Canvas(canvasRef.current)
     init(fabricCanvas.current)
     return () => {
       fabricCanvas.current = null
     }
   }, [])
-  return <canvas ref={canvasRef} />
+  return (
+    <div>
+      <canvas ref={canvasRef} />
+    </div>
+  )
 }
