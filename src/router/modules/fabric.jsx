@@ -90,6 +90,34 @@ const Fabric31 = Loadable(() => import('@/pages/fabric/基础图形/路径1'), {
   fallback: <Loading />,
 })
 
+const Fabric40 = Loadable(() => import('@/pages/fabric/文本/可编辑文本1'), {
+  fallback: <Loading />,
+})
+const Fabric41 = Loadable(() => import('@/pages/fabric/文本/多行文本1'), {
+  fallback: <Loading />,
+})
+const Fabric42 = Loadable(() => import('@/pages/fabric/文本/多行文本2'), {
+  fallback: <Loading />,
+})
+const Fabric43 = Loadable(() => import('@/pages/fabric/文本/多行文本3'), {
+  fallback: <Loading />,
+})
+const Fabric44 = Loadable(() => import('@/pages/fabric/文本/文本1'), {
+  fallback: <Loading />,
+})
+const Fabric45 = Loadable(() => import('@/pages/fabric/文本/文本2'), {
+  fallback: <Loading />,
+})
+const Fabric46 = Loadable(() => import('@/pages/fabric/文本/文本3'), {
+  fallback: <Loading />,
+})
+const Fabric47 = Loadable(() => import('@/pages/fabric/文本/文本省略1'), {
+  fallback: <Loading />,
+})
+const Fabric48 = Loadable(() => import('@/pages/fabric/文本/文本边框1'), {
+  fallback: <Loading />,
+})
+
 const routes = [
   {
     path: '/fabric/元素操作/元素定位1',
@@ -206,6 +234,42 @@ const routes = [
   {
     path: '/fabric/基础图形/路径1',
     element: <Fabric31 />,
+  },
+  {
+    path: '/fabric/text/edit-text',
+    element: <Fabric40 />,
+  },
+  {
+    path: '/fabric/文本/多行文本1',
+    element: <Fabric41 />,
+  },
+  {
+    path: '/fabric/文本/多行文本2',
+    element: <Fabric42 />,
+  },
+  {
+    path: '/fabric/文本/多行文本3',
+    element: <Fabric43 />,
+  },
+  {
+    path: '/fabric/文本/文本1',
+    element: <Fabric44 />,
+  },
+  {
+    path: '/fabric/文本/文本2',
+    element: <Fabric45 />,
+  },
+  {
+    path: '/fabric/文本/文本3',
+    element: <Fabric46 />,
+  },
+  {
+    path: '/fabric/文本/文本省略1',
+    element: <Fabric47 />,
+  },
+  {
+    path: '/fabric/文本/文本边框1',
+    element: <Fabric48 />,
   },
 ]
 
