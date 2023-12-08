@@ -236,7 +236,7 @@ const routes = [
     element: <Fabric31 />,
   },
   {
-    path: '/fabric/text/edit-text',
+    path: '/fabric/文本/可编辑文本1',
     element: <Fabric40 />,
   },
   {
