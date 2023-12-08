@@ -15,12 +15,13 @@ const Component = () => {
   const percentRef = useRef(0)
   const [percent, setPercent] = useState(0)
   const timerRef = useRef(null)
+  const [msg, setMsg] = useState('')
 
   // iframe向主页面发送数据
   const sendMessage = () => {
     window.parent.postMessage(
       JSON.stringify({
-        load: 'done',
+        type: 'show',
       }),
       '*' // 这里是主页面域名
     )
@@ -50,6 +51,7 @@ const Component = () => {
     // iframe接收数据
     window.addEventListener('message', function (e) {
       try {
+        setMsg(e.data)
         const params = JSON.parse(e.data)
         console.log('我是iframe我接收到数据：', params)
       } catch (error) {
@@ -69,6 +71,8 @@ const Component = () => {
           <Progress percent={percentRef.current} />
         </div>
       )}
+
+      <div className={styles.msg}>{msg}</div>
     </div>
   )
 }

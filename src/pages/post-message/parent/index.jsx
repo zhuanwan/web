@@ -17,8 +17,8 @@ const Component = () => {
       try {
         const data = JSON.parse(e.data)
         console.log('我是父窗口我接收到数据：', data)
-        if (data.load === 'done') {
-          console.log('成功啦')
+        if (data.type === 'show') {
+          console.log(data.type)
         }
       } catch (error) {
         console.log(error)
