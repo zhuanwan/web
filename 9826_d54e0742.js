@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkweb=self.webpackChunkweb||[]).push([[9826],{9826:(n,e,r)=>{var t=r(2109),i=r(2092).find,f=r(1223),u="find",a=!0;u in[]&&Array(1)[u]((function(){a=!1})),t({target:"Array",proto:!0,forced:a},{find:function(n){return i(this,n,arguments.length>1?arguments[1]:void 0)}}),f(u)}}]);

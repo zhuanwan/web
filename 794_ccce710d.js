@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkweb=self.webpackChunkweb||[]).push([[794],{794:(e,n,s)=>{s.r(n),s.d(n,{default:()=>f});var t=s(7294),a=s(9250),u=s(9655),c=s(5893);const f=function(){var e=(0,a.s0)(),n=(0,u.lr)()[0];return(0,t.useEffect)((function(){if(n.has("ghpage")){var s=decodeURIComponent(n.get("ghpage"));e(s)}}),[]),(0,c.jsx)(a.j3,{})}}}]);

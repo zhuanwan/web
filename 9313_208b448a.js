@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkweb=self.webpackChunkweb||[]).push([[9313],{9313:(e,t,s)=>{s.r(t),s.d(t,{default:()=>c});var n=s(9250),r=s(9929),u=s(6523),a=s(5893);const c=function(){var e=(0,n.s0)();return(0,a.jsx)(r.ZP,{status:"404",title:"404",subTitle:"找不到该页面",extra:(0,a.jsx)(u.ZP,{type:"primary",onClick:function(){e("/")},children:"回到首页"})})}}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkweb=self.webpackChunkweb||[]).push([[8309],{8309:(e,n,t)=>{var r=t(9781),c=t(6530).EXISTS,u=t(1702),s=t(7045),i=Function.prototype,o=u(i.toString),a=/function\b(?:\s|\/\*[\S\s]*?\*\/|\/\/[^\n\r]*[\n\r]+)*([^\s(/]*)/,b=u(a.exec);r&&!c&&s(i,"name",{configurable:!0,get:function(){try{return b(a,o(this))[1]}catch(e){return""}}})}}]);
