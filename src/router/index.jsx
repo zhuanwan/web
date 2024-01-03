@@ -2,8 +2,8 @@ import Loadable from '@loadable/component'
 
 import Loading from '@/components/loading'
 
-import postMessage from './modules/post-message'
 import fabric from './modules/fabric'
+import postMessage from './modules/post-message'
 
 const NoMatch = Loadable(() => import('@/pages/404'), {
   fallback: <Loading />,
