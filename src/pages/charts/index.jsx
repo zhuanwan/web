@@ -188,6 +188,32 @@ const Component = () => {
         })}
         style={{ height: '300px', width: '1000px' }}
       />
+      {/* 立方体柱形图 */}
+      <Echarts
+        option={cubeBarChart({
+          timeSlot: [
+            '2023年1月',
+            '2023年2月',
+            '2023年3月',
+            '2023年4月',
+            '2023年5月',
+            '2023年6月',
+            '2023年4月',
+            '2023年5月',
+            '2023年6月',
+          ],
+          seriesData: [
+            {
+              name: '系列一',
+              data: [100, 200, 300, 400, 300, 200, 400, 300, 200],
+            },
+          ],
+          units: ['kW'],
+          markLineData: [{ name: '阈值1', yAxis: 100, color: '#F59A23' }],
+          barWidth: 10,
+        })}
+        style={{ height: '300px', width: '1000px' }}
+      />
       {/* 分时段柱形图 */}
       <Echarts
         option={timePeriodBarChart({

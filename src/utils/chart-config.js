@@ -1,5 +1,59 @@
 import { convertToWanArr, numFloorFormat } from '@/utils'
 
+// 绘制左侧面
+const CubeLeft = echarts.graphic.extendShape({
+  shape: {
+    x: 0,
+    y: 0,
+  },
+  buildPath(ctx, shape) {
+    // x,y 是基准点，exHeight是突出来的高度，y2是y=0时实际y轴的值
+    const { x, y, barWidth, exHeight, y2 } = shape
+    const c0 = [x, y]
+    const c1 = [x - barWidth, y - exHeight]
+    const c2 = [x - barWidth, y2]
+    const c3 = [x, y2]
+    ctx.moveTo(c0[0], c0[1]).lineTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).closePath()
+  },
+})
+// 绘制右侧面
+const CubeRight = echarts.graphic.extendShape({
+  shape: {
+    x: 0,
+    y: 0,
+  },
+  buildPath(ctx, shape) {
+    // x,y 是基准点，exHeight是突出来的高度，y2是y=0时实际y轴的值
+    const { x, y, barWidth, exHeight, y2 } = shape
+    const c0 = [x, y]
+    const c1 = [x + barWidth, y - exHeight]
+    const c2 = [x + barWidth, y2]
+    const c3 = [x, y2]
+    ctx.moveTo(c0[0], c0[1]).lineTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).closePath()
+  },
+})
+// 绘制顶面
+const CubeTop = echarts.graphic.extendShape({
+  shape: {
+    x: 0,
+    y: 0,
+  },
+  buildPath(ctx, shape) {
+    // x,y 是基准点，exHeight是突出来的高度
+    const { x, y, barWidth, exHeight } = shape
+    const c0 = [x, y]
+    const c1 = [x - barWidth, y - exHeight]
+    const c2 = [x, y - 2 * exHeight]
+    const c3 = [x + barWidth, y - exHeight]
+
+    ctx.moveTo(c0[0], c0[1]).lineTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).closePath()
+  },
+})
+// 注册三个面图形
+echarts.graphic.registerShape('CubeLeft', CubeLeft)
+echarts.graphic.registerShape('CubeRight', CubeRight)
+echarts.graphic.registerShape('CubeTop', CubeTop)
+
 // 浮层通用样式
 const markerStyle = `display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;`
 export const axisLabelColor = 'rgba(255,255,255,0.6)' // 坐标轴 数值颜色
@@ -111,63 +165,14 @@ export const contrastBarChart = ({
   timeSlot = [],
   barWidth = 12,
   seriesData = [],
-  barAngle = 4,
   colorArr = [
     ['#00E2FC', '#0293A4', '#00E2FC'],
     ['#FFD858', '#DCAE17', '#FFD858'],
   ],
   units = [],
 } = {}) => {
-  // 绘制左侧面
-  const CubeLeft = echarts.graphic.extendShape({
-    shape: {
-      x: 0,
-      y: 0,
-    },
-    buildPath(ctx, shape) {
-      // 会canvas的应该都能看得懂，shape是从custom传入的
-      const { xAxisPoint } = shape
-      const c0 = [shape.x, shape.y]
-      const c1 = [shape.x - barWidth, shape.y - barAngle]
-      const c2 = [xAxisPoint[0] - barWidth, xAxisPoint[1] - barAngle]
-      const c3 = [xAxisPoint[0], xAxisPoint[1]]
-      ctx.moveTo(c0[0], c0[1]).lineTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).closePath()
-    },
-  })
-  // 绘制右侧面
-  const CubeRight = echarts.graphic.extendShape({
-    shape: {
-      x: 0,
-      y: 0,
-    },
-    buildPath(ctx, shape) {
-      const { xAxisPoint } = shape
-      const c1 = [shape.x, shape.y]
-      const c2 = [xAxisPoint[0], xAxisPoint[1]]
-      const c3 = [xAxisPoint[0] + barWidth, xAxisPoint[1] - barAngle]
-      const c4 = [shape.x + barWidth, shape.y - barAngle]
-      ctx.moveTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).lineTo(c4[0], c4[1]).closePath()
-    },
-  })
-  // 绘制顶面
-  const CubeTop = echarts.graphic.extendShape({
-    shape: {
-      x: 0,
-      y: 0,
-    },
-    buildPath(ctx, shape) {
-      const c1 = [shape.x, shape.y]
-      const c2 = [shape.x + barWidth, shape.y - barAngle]
-      const c3 = [shape.x, shape.y - barAngle * 2]
-      const c4 = [shape.x - barWidth, shape.y - barAngle]
-      ctx.moveTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).lineTo(c4[0], c4[1]).closePath()
-    },
-  })
-  // 注册三个面图形
-  echarts.graphic.registerShape('CubeLeft', CubeLeft)
-  echarts.graphic.registerShape('CubeRight', CubeRight)
-  echarts.graphic.registerShape('CubeTop', CubeTop)
-
+  const radians = (30 * Math.PI) / 180
+  const exHeight = barWidth * Math.tan(radians)
   // 批量处理柱体
   const customs = []
   const offsets = [-12, 12]
@@ -175,7 +180,8 @@ export const contrastBarChart = ({
     return {
       type: 'custom',
       renderItem: (_, api) => {
-        const location = api.coord([api.value(0), api.value(1)])
+        const [x, y] = api.coord([api.value(0), api.value(1)])
+        const [x2, y2] = api.coord([api.value(0), 0])
         return {
           type: 'group',
           x: offset,
@@ -184,11 +190,11 @@ export const contrastBarChart = ({
               type: 'CubeLeft',
               shape: {
                 api,
-                xValue: api.value(0),
-                yValue: api.value(1),
-                x: location[0],
-                y: location[1],
-                xAxisPoint: api.coord([api.value(0), 0]),
+                x,
+                y,
+                y2,
+                exHeight,
+                barWidth,
               },
               style: {
                 fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -207,11 +213,11 @@ export const contrastBarChart = ({
               type: 'CubeRight',
               shape: {
                 api,
-                xValue: api.value(0),
-                yValue: api.value(1),
-                x: location[0],
-                y: location[1],
-                xAxisPoint: api.coord([api.value(0), 0]),
+                x,
+                y,
+                y2,
+                exHeight,
+                barWidth,
               },
               style: {
                 fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -230,11 +236,11 @@ export const contrastBarChart = ({
               type: 'CubeTop',
               shape: {
                 api,
-                xValue: api.value(0),
-                yValue: api.value(1),
-                x: location[0],
-                y: location[1],
-                xAxisPoint: api.coord([api.value(0), 0]),
+                x,
+                y,
+                y2,
+                exHeight,
+                barWidth,
               },
               style: {
                 fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -550,7 +556,6 @@ export const gradientPieChart = ({ percent = 0, linearColors = ['#008BFF', '#3BD
  */
 export const cubeBarChart = ({
   barWidth = 20,
-  barAngle = 6,
   timeSlot = [],
   colorArr = ['#00E2FC', '#0293A4', '#00E2FC'],
   showYAxis = false,
@@ -558,55 +563,8 @@ export const cubeBarChart = ({
   seriesData = [],
   markLineData = [],
 } = {}) => {
-  // 绘制左侧面
-  const CubeLeft = echarts.graphic.extendShape({
-    shape: {
-      x: 0,
-      y: 0,
-    },
-    buildPath(ctx, shape) {
-      // 会canvas的应该都能看得懂，shape是从custom传入的
-      const { xAxisPoint } = shape
-      const c0 = [shape.x, shape.y]
-      const c1 = [shape.x - barWidth, shape.y - barAngle]
-      const c2 = [xAxisPoint[0] - barWidth, xAxisPoint[1] - barAngle]
-      const c3 = [xAxisPoint[0], xAxisPoint[1]]
-      ctx.moveTo(c0[0], c0[1]).lineTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).closePath()
-    },
-  })
-  // 绘制右侧面
-  const CubeRight = echarts.graphic.extendShape({
-    shape: {
-      x: 0,
-      y: 0,
-    },
-    buildPath(ctx, shape) {
-      const { xAxisPoint } = shape
-      const c1 = [shape.x, shape.y]
-      const c2 = [xAxisPoint[0], xAxisPoint[1]]
-      const c3 = [xAxisPoint[0] + barWidth, xAxisPoint[1] - barAngle]
-      const c4 = [shape.x + barWidth, shape.y - barAngle]
-      ctx.moveTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).lineTo(c4[0], c4[1]).closePath()
-    },
-  })
-  // 绘制顶面
-  const CubeTop = echarts.graphic.extendShape({
-    shape: {
-      x: 0,
-      y: 0,
-    },
-    buildPath(ctx, shape) {
-      const c1 = [shape.x, shape.y]
-      const c2 = [shape.x + barWidth, shape.y - barAngle]
-      const c3 = [shape.x, shape.y - barAngle * 2]
-      const c4 = [shape.x - barWidth, shape.y - barAngle]
-      ctx.moveTo(c1[0], c1[1]).lineTo(c2[0], c2[1]).lineTo(c3[0], c3[1]).lineTo(c4[0], c4[1]).closePath()
-    },
-  })
-  // 注册三个面图形
-  echarts.graphic.registerShape('CubeLeft', CubeLeft)
-  echarts.graphic.registerShape('CubeRight', CubeRight)
-  echarts.graphic.registerShape('CubeTop', CubeTop)
+  const radians = (30 * Math.PI) / 180
+  const exHeight = barWidth * Math.tan(radians)
 
   return {
     tooltip: {
@@ -663,7 +621,8 @@ export const cubeBarChart = ({
       {
         type: 'custom',
         renderItem: (_, api) => {
-          const location = api.coord([api.value(0), api.value(1)])
+          const [x, y] = api.coord([api.value(0), api.value(1)])
+          const [x2, y2] = api.coord([api.value(0), 0])
           return {
             type: 'group',
             children: [
@@ -671,11 +630,11 @@ export const cubeBarChart = ({
                 type: 'CubeLeft',
                 shape: {
                   api,
-                  xValue: api.value(0),
-                  yValue: api.value(1),
-                  x: location[0],
-                  y: location[1],
-                  xAxisPoint: api.coord([api.value(0), 0]),
+                  x,
+                  y,
+                  y2,
+                  barWidth,
+                  exHeight,
                 },
                 style: {
                   fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -694,11 +653,11 @@ export const cubeBarChart = ({
                 type: 'CubeRight',
                 shape: {
                   api,
-                  xValue: api.value(0),
-                  yValue: api.value(1),
-                  x: location[0],
-                  y: location[1],
-                  xAxisPoint: api.coord([api.value(0), 0]),
+                  x,
+                  y,
+                  y2,
+                  barWidth,
+                  exHeight,
                 },
                 style: {
                   fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -717,11 +676,11 @@ export const cubeBarChart = ({
                 type: 'CubeTop',
                 shape: {
                   api,
-                  xValue: api.value(0),
-                  yValue: api.value(1),
-                  x: location[0],
-                  y: location[1],
-                  xAxisPoint: api.coord([api.value(0), 0]),
+                  x,
+                  y,
+                  y2,
+                  barWidth,
+                  exHeight,
                 },
                 style: {
                   fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
