@@ -1,4 +1,3 @@
-import * as d3 from 'd3'
 import * as THREE from 'three'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'

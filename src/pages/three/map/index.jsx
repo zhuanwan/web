@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Easing, Tween } from '@tweenjs/tween.js'
 import * as d3 from 'd3'
 import { gsap } from 'gsap'
@@ -33,17 +33,18 @@ export default function Component() {
   let areaPointArrLen = 0
   const handleProj = d3.geoMercator().center([114.085947, 22.547]).scale(80000).translate([0, 0])
 
-  // 初始化城市
+  // 初始化城市数据
   const initCity = () => {
-    areaPointArr = szJson.features.map((ele) => {
-      return { name: ele.properties.name, properties: { center: ele.properties.center } }
-    })
+    areaPointArr = szJson.features.map((ele) => ({
+      name: ele.properties.name,
+      properties: { center: ele.properties.center },
+    }))
     areaPointArrLen = areaPointArr.length
   }
 
-  // 生成线段
+  // 生成随机线段
   const randomCity = () => {
-    const num0 = Math.floor(Math.random() * (6 + 1))
+    const num0 = Math.floor(Math.random() * 7) // 生成 0-6 条线段
     const arr = []
     for (let i = 0; i < num0; i++) {
       const [num1, num2] = getRandomTwoNumbers(areaPointArrLen - 1)
@@ -57,47 +58,43 @@ export default function Component() {
       .map((ele) => `<div>从${ele[0].name} ${ele[0].time}点 到${ele[1].name} ${ele[1].time}点</div>`)
       .join('')}`
     document.getElementById('desc').innerHTML = str
+
     drawCity(arr)
   }
 
-  // 画城市
+  // 绘制城市
   const drawCity = (arr) => {
     if (sceneRef.current) {
-      clearScene()
+      clearScene() // 清除之前的场景内容
     }
 
     const filterArr = arr
       .flat()
       .filter((value, index, self) => index === self.findIndex((item) => item.name === value.name))
 
-    // 画柱状图
-    const newCylinders = filterArr.map((ele) => {
-      return createCylinder({ feature: ele, handleProj })
-    })
+    // 绘制柱状图
+    const newCylinders = filterArr.map((ele) => createCylinder({ feature: ele, handleProj }))
     newCylinders.forEach((cylinder) => sceneRef.current.add(cylinder))
-
     lastCylindersRef.current = newCylinders
 
-    // 画连接柱状体的线条
+    // 绘制连接柱状体的线条
     arr.forEach(([start, end]) => {
       const curve = createCurveForCity(start, end, newCylinders)
-      sceneRef.current.add(curve)
-      lastCurvesRef.current.push(curve)
-      createAnimationForCurve(curve)
+      if (curve) {
+        sceneRef.current.add(curve)
+        lastCurvesRef.current.push(curve)
+        createAnimationForCurve(curve)
+      }
     })
   }
 
-  // 找到时间点
+  // 找到对应时间的红点
   const findRedPoint = (point, newCylinders) => {
     const cylinder = newCylinders.find((ele) => ele.name === point.name)
+    if (!cylinder) return null
+
     // 找到柱状体上对应时间的红点
-    let p = null
-    cylinder.children.forEach((child) => {
-      if (child.userData && child.userData.time === point.time) {
-        p = child
-      }
-    })
-    return p
+    return cylinder.children.find((child) => child.userData?.time === point.time)
   }
 
   // 创建贝塞尔曲线
@@ -106,17 +103,18 @@ export default function Component() {
     const endRedPoint = findRedPoint(end, newCylinders)
     if (!startRedPoint || !endRedPoint) {
       console.error('未找到对应时间的点')
-      return
+      return null
     }
-
-    const startCenter = start.properties.center
-    const endCenter = end.properties.center
 
     const startV = startRedPoint.getWorldPosition(new THREE.Vector3())
     const endV = endRedPoint.getWorldPosition(new THREE.Vector3())
 
-    const v1 = new THREE.Vector3(startCenter[0], -startCenter[1], 100)
-    const v2 = new THREE.Vector3(endCenter[0], -endCenter[1], 100)
+    const v1 = new THREE.Vector3(startV.x + (endV.x - startV.x) / 4, startV.y + (endV.y - startV.y) / 4, startV.z + 50)
+    const v2 = new THREE.Vector3(
+      startV.x + ((endV.x - startV.x) * 3) / 4,
+      startV.y + ((endV.y - startV.y) * 3) / 4,
+      endV.z - 50
+    )
 
     const curve = new THREE.CubicBezierCurve3(startV, v1, v2, endV)
     const tubeGeometry = new THREE.TubeGeometry(curve, 256, 1, 8, false)
@@ -124,11 +122,14 @@ export default function Component() {
     return new THREE.Mesh(tubeGeometry, material)
   }
 
-  // 清理场景
+  // 清除场景
   const clearScene = () => {
     lastCylindersRef.current.forEach((cylinder) => sceneRef.current.remove(cylinder))
     lastCurvesRef.current.forEach((curve) => sceneRef.current.remove(curve))
-    lastPointsRef.current.forEach((point) => sceneRef.current.remove(point))
+    lastPointsRef.current.forEach((point) => {
+      sceneRef.current.remove(point)
+      gsap.killTweensOf(point.material.uniforms.uTime) // 清除动画
+    })
 
     lastCylindersRef.current = []
     lastCurvesRef.current = []
@@ -156,8 +157,10 @@ export default function Component() {
     )
   }
 
+  // 初始化 Three.js 场景
   useEffect(() => {
     initCity()
+
     // 渲染器
     const canvas = canvasRef.current
     rendererRef.current = new THREE.WebGLRenderer({ canvas })
@@ -165,9 +168,7 @@ export default function Component() {
 
     // 相机
     cameraRef.current = new THREE.PerspectiveCamera(70, canvas.clientWidth / canvas.clientHeight, 0.01, 10000)
-    cameraRef.current.position.z = 1000
-    cameraRef.current.position.x = 0
-    cameraRef.current.position.y = -500
+    cameraRef.current.position.set(0, -500, 1000)
 
     // 场景
     sceneRef.current = new THREE.Scene()
@@ -179,48 +180,62 @@ export default function Component() {
     spotLight.castShadow = true
     sceneRef.current.add(ambLight, spotLight)
 
-    // gui
+    // GUI
     const { gui, folder } = initGui()
 
-    // 创建相机动画
-    const tween = new Tween({ x: 2000, y: 2000, z: 3000 })
-      .to(cameraRef.current.position, 5000)
-      .easing(Easing.Quadratic.Out)
-      .onUpdate((object) => {
-        cameraRef.current.position.set(object.x, object.y, object.z)
-      })
-      .start()
+    // 相机动画
+    // const tween = new Tween({ x: 2000, y: 2000, z: 3000 })
+    //   .to(cameraRef.current.position, 5000)
+    //   .easing(Easing.Quadratic.Out)
+    //   .onUpdate((object) => {
+    //     cameraRef.current.position.set(object.x, object.y, object.z)
+    //     console.log(object)
+    //   })
+    //   .start()
 
+    // 替换 Tween 为 gsap
+    gsap.fromTo(
+      cameraRef.current.position, // 动画的对象
+      {
+        x: 2000,
+        y: 2000,
+        z: 5000,
+      },
+      {
+        x: 0,
+        y: -500,
+        z: 1000,
+        duration: 5, // 动画持续时间 5秒
+        ease: 'power2.out', // 动画缓动函数，类似于 Easing.Quadratic.Out
+      }
+    )
     // 处理地图数据
     handleData({ scene: sceneRef.current, gui, handleProj })
 
-    // 设置相机轨道控制器
+    // 轨道控制器
     const controls = new OrbitControls(cameraRef.current, rendererRef.current.domElement)
     controls.enableDamping = true
 
-    // 添加辅助线
+    // 辅助线
     const axesHelper = new THREE.AxesHelper(500)
     sceneRef.current.add(axesHelper)
-
     folder.add(axesHelper, 'visible').name('是否显示辅助线')
 
-    // 动画函数
+    // 动画循环
     const animate = () => {
       rendererRef.current.render(sceneRef.current, cameraRef.current)
       requestAnimationFrame(animate)
-      tween.update()
       controls.update()
     }
-
     animate()
 
-    // 设置窗口调整事件
+    // 窗口调整事件
     const cleanupResizeHandler = setupResizeHandler(rendererRef.current, cameraRef.current)
-    const tooltipHandler = pointerMoveHandler(sceneRef.current, cameraRef.current)
+    const cleanupPointerMoveHandler = pointerMoveHandler(sceneRef.current, cameraRef.current)
 
     return () => {
       cleanupResizeHandler()
-      tooltipHandler()
+      cleanupPointerMoveHandler()
     }
   }, [])
 
