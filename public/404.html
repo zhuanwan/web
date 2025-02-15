@@ -8,10 +8,11 @@
   <title>redirect</title>
 </head>
 <script>
-  const path = location.pathname;
-  const pos = path.indexOf('\/', 1);
-  const repo = path.substring(0, pos);
-  const ghpage = path.substring(pos);
+  // 'http://localhost:8099/web/fabric/echarts-demo'
+  const path = location.pathname; //  '/web/fabric/echarts-demo'
+  const pos = path.indexOf('\/', 1); // 4
+  const repo = path.substring(0, pos); // '/web'
+  const ghpage = path.substring(pos); // '/fabric/echarts-demo'
   const redirectUrl = location.origin + repo + '/?ghpage=' + encodeURIComponent(ghpage + location.search);
   window.location.replace(redirectUrl);
 </script>

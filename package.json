@@ -14,15 +14,19 @@
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
     "@loadable/component": "^5.15.3",
+    "@tweenjs/tween.js": "^25.0.0",
     "antd": "^5.7.0",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
+    "d3": "^7.9.0",
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
     "fabric": "^5.3.0",
+    "gsap": "^3.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.18.0"
+    "react-router-dom": "^6.18.0",
+    "three": "^0.173.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",

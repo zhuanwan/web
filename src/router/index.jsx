@@ -4,6 +4,7 @@ import Loading from '@/components/loading'
 
 import fabric from './modules/fabric'
 import postMessage from './modules/post-message'
+import three from './modules/three'
 
 const NoMatch = Loadable(() => import('@/pages/404'), {
   fallback: <Loading />,
@@ -30,6 +31,7 @@ const routes = [
   },
   ...postMessage,
   ...fabric,
+  ...three,
   { path: '*', element: <NoMatch /> },
 ]
 
