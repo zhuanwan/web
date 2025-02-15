@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-import { Easing, Tween } from '@tweenjs/tween.js'
 import * as d3 from 'd3'
 import { gsap } from 'gsap'
 import * as THREE from 'three'
@@ -183,16 +182,6 @@ export default function Component() {
     // GUI
     const { gui, folder } = initGui()
 
-    // 相机动画
-    // const tween = new Tween({ x: 2000, y: 2000, z: 3000 })
-    //   .to(cameraRef.current.position, 5000)
-    //   .easing(Easing.Quadratic.Out)
-    //   .onUpdate((object) => {
-    //     cameraRef.current.position.set(object.x, object.y, object.z)
-    //     console.log(object)
-    //   })
-    //   .start()
-
     // 替换 Tween 为 gsap
     gsap.fromTo(
       cameraRef.current.position, // 动画的对象
@@ -236,6 +225,29 @@ export default function Component() {
     return () => {
       cleanupResizeHandler()
       cleanupPointerMoveHandler()
+
+      // 清理 Three.js 场景
+      sceneRef.current.traverse((object) => {
+        if (object.isMesh) {
+          object.geometry.dispose() // 释放几何体
+          if (object.material) {
+            if (Array.isArray(object.material)) {
+              object.material.forEach((material) => material.dispose()) // 释放材质
+            } else {
+              object.material.dispose()
+            }
+          }
+        }
+      })
+      sceneRef.current.clear() // 清空场景
+      rendererRef.current.dispose() // 释放渲染器
+      controls.dispose() // 销毁轨道控制器
+
+      // 清理 GSAP 动画
+      gsap.globalTimeline.clear() // 清除所有 GSAP 动画
+      lastPointsRef.current.forEach((point) => {
+        gsap.killTweensOf(point.material.uniforms.uTime) // 停止特定动画
+      })
     }
   }, [])
 
