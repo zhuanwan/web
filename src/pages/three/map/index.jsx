@@ -48,8 +48,8 @@ export default function Component() {
     for (let i = 0; i < num0; i++) {
       const [num1, num2] = getRandomTwoNumbers(areaPointArrLen - 1)
       arr.push([
-        { ...areaPointArr[num1], time: getRandomNumber(23), staName: `场站${2 * i}` },
-        { ...areaPointArr[num2], time: getRandomNumber(23), staName: `场站${2 * i + 1}` },
+        { ...areaPointArr[num1], time: getRandomNumber(23), staName: `场站(${2 * i})` },
+        { ...areaPointArr[num2], time: getRandomNumber(23), staName: `场站(${2 * i + 1})` },
       ])
     }
 
