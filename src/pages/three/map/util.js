@@ -143,20 +143,36 @@ export function pointerMoveHandler(scene, camera) {
     // 判断数组是否有数据，有数据全部设置为原始数据
     if (activeIntersects.length) {
       for (let i = 0; i < activeIntersects.length; i++) {
-        activeIntersects[i].object.material.color.set('#d13a34')
+        if (activeIntersects[i].object.userData?.info) {
+          // 线条
+          activeIntersects[i].object.material.color.set('#ffffff')
+        } else {
+          // 地图板块
+          activeIntersects[i].object.material.color.set('#d13a34')
+        }
       }
     }
+
     // 计算物体和射线的焦点
-    // const intersects = raycaster.intersectObjects(scene.children)
     const obj3d = scene.children.filter((s) => s.type === 'Object3D')[0].children
-    const intersects = raycaster.intersectObjects(obj3d, true)
+    const meshes = scene.children.filter((child) => child.type === 'Mesh') // 只选取 Mesh 对象
+    const intersects = raycaster.intersectObjects([...obj3d, ...meshes], true)
 
     if (intersects.length) {
-      // 设置hove 弹框的宽高
+      // 设置悬浮弹框的宽高
       info.style.left = `${event.clientX}px`
       info.style.top = `${event.clientY}px`
       info.style.display = 'block'
-      info.innerHTML = intersects[0].object.parent.name
+
+      // 优先检测连接线条
+      const lineIntersect = intersects.find((obj) => obj.object.isMesh && obj.object.userData?.info)
+      if (lineIntersect) {
+        // 显示连接线条的悬浮信息
+        info.innerHTML = lineIntersect.object.userData.info
+      } else {
+        // 显示地图板块的悬浮信息
+        info.innerHTML = intersects[0].object.parent.name
+      }
 
       // 当碰撞到了CylinderGeometry和TextGeometry就不变颜色
       const black = ['CylinderGeometry', 'TextGeometry']
@@ -179,6 +195,7 @@ export function pointerMoveHandler(scene, camera) {
       }
     }
   }
+
   window.addEventListener('pointermove', onPointerMove)
   return () => window.removeEventListener('pointermove', onPointerMove)
 }

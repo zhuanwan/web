@@ -116,9 +116,15 @@ export default function Component() {
     )
 
     const curve = new THREE.CubicBezierCurve3(startV, v1, v2, endV)
-    const tubeGeometry = new THREE.TubeGeometry(curve, 256, 1, 8, false)
+    const tubeGeometry = new THREE.TubeGeometry(curve, 256, 2, 16, false)
     const material = new THREE.MeshBasicMaterial({ color: '#ffffff' })
-    return new THREE.Mesh(tubeGeometry, material)
+
+    const mesh = new THREE.Mesh(tubeGeometry, material)
+    // 为线条添加 userData，存储需要显示的文案信息
+    mesh.userData = {
+      info: `从 ${start.name} ${start.time}点 到 ${end.name} ${end.time}点`,
+    }
+    return mesh
   }
 
   // 清除场景
@@ -167,7 +173,7 @@ export default function Component() {
 
     // 相机
     cameraRef.current = new THREE.PerspectiveCamera(70, canvas.clientWidth / canvas.clientHeight, 0.01, 10000)
-    cameraRef.current.position.set(0, -500, 1000)
+    cameraRef.current.position.set(0, -500, 500)
 
     // 场景
     sceneRef.current = new THREE.Scene()
@@ -193,7 +199,7 @@ export default function Component() {
       {
         x: 0,
         y: -500,
-        z: 1000,
+        z: 500,
         duration: 5, // 动画持续时间 5秒
         ease: 'power2.out', // 动画缓动函数，类似于 Easing.Quadratic.Out
       }
