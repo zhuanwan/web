@@ -48,8 +48,8 @@ export default function Component() {
     for (let i = 0; i < num0; i++) {
       const [num1, num2] = getRandomTwoNumbers(areaPointArrLen - 1)
       arr.push([
-        { ...areaPointArr[num1], time: getRandomNumber(23) },
-        { ...areaPointArr[num2], time: getRandomNumber(23) },
+        { ...areaPointArr[num1], time: getRandomNumber(23), staName: `场站${2 * i}` },
+        { ...areaPointArr[num2], time: getRandomNumber(23), staName: `场站${2 * i + 1}` },
       ])
     }
 
@@ -122,7 +122,8 @@ export default function Component() {
     const mesh = new THREE.Mesh(tubeGeometry, material)
     // 为线条添加 userData，存储需要显示的文案信息
     mesh.userData = {
-      info: `从 ${start.name} ${start.time}点 到 ${end.name} ${end.time}点`,
+      type: 'line',
+      info: `从 ${start.name}-${start.staName} ${start.time}点 到 ${end.name}-${end.staName} ${end.time}点`,
     }
     return mesh
   }

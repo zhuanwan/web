@@ -143,12 +143,13 @@ export function pointerMoveHandler(scene, camera) {
     // 判断数组是否有数据，有数据全部设置为原始数据
     if (activeIntersects.length) {
       for (let i = 0; i < activeIntersects.length; i++) {
-        if (activeIntersects[i].object.userData?.info) {
+        const activeInsObj = activeIntersects[i].object
+        if (activeInsObj.userData?.info) {
           // 线条
-          activeIntersects[i].object.material.color.set('#ffffff')
+          activeInsObj.material.color.set('#ffffff')
         } else {
           // 地图板块
-          activeIntersects[i].object.material.color.set('#d13a34')
+          activeInsObj.material.color.set('#d13a34')
         }
       }
     }
@@ -164,14 +165,15 @@ export function pointerMoveHandler(scene, camera) {
       info.style.top = `${event.clientY}px`
       info.style.display = 'block'
 
-      // 优先检测连接线条
-      const lineIntersect = intersects.find((obj) => obj.object.isMesh && obj.object.userData?.info)
+      // 优先检测连接线条/柱状图
+      const lineIntersect = intersects.find((obj) => obj.object.isMesh && obj.object.userData?.type)
       if (lineIntersect) {
         // 显示连接线条的悬浮信息
         info.innerHTML = lineIntersect.object.userData.info
       } else {
         // 显示地图板块的悬浮信息
-        info.innerHTML = intersects[0].object.parent.name
+        // info.innerHTML = intersects[0].object.parent.name
+        info.style.display = 'none'
       }
 
       // 当碰撞到了CylinderGeometry和TextGeometry就不变颜色
@@ -260,9 +262,9 @@ export function createShaderMaterial() {
               // p1 uWidth越大水滴越粗
               // vSize = uWidth * ((aIndex - uTime + uLength) / uLength);
               // p2 uWidth越大水滴越细
-              vSize = (aIndex + uLength - uTime) / uWidth;
+              vSize = (aIndex + uLength - uTime) / (uWidth * 0.4); // 调整分母以增加点的大小
             }
-            gl_PointSize = vSize;
+            gl_PointSize = vSize * 4.0;
         }
       `,
     fragmentShader: /* glsl */ `
@@ -335,7 +337,7 @@ const createLineMesh = ({ coordinate, handleProj, folder }) => {
 
 // 创建柱体
 export const createCylinder = ({ feature, handleProj }) => {
-  const { name } = feature
+  const { name, staName } = feature
   const { center } = feature.properties
 
   if (!center) return null
@@ -366,5 +368,6 @@ export const createCylinder = ({ feature, handleProj }) => {
 
   points.forEach((point) => cylinder.add(point))
   cylinder.name = name
+  cylinder.userData = { type: 'cylinder', info: `${staName}` }
   return cylinder
 }
