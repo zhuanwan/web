@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+/* eslint-disable react/no-array-index-key */
+import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import { gsap } from 'gsap'
 import * as THREE from 'three'
@@ -10,61 +11,38 @@ import {
   createBufferGeometry,
   createCylinder,
   createShaderMaterial,
-  getRandomNumber,
-  getRandomTwoNumbers,
+  generateRandomRoutes,
+  getAllStations,
   handleData,
   initGui,
   pointerMoveHandler,
   setupResizeHandler,
 } from './util'
-import szJson from './深圳市.json'
 
 export default function Component() {
   const canvasRef = useRef(null)
   const rendererRef = useRef(null)
   const cameraRef = useRef(null)
   const sceneRef = useRef(null)
+
   const lastCylindersRef = useRef([])
   const lastCurvesRef = useRef([])
   const lastPointsRef = useRef([])
 
-  let areaPointArr = []
-  let areaPointArrLen = 0
+  const acitveStationName = useRef('')
+  const [allStationFlow, setAllStationFlow] = useState([]) // 所有站点流量
+
   const handleProj = d3.geoMercator().center([114.085947, 22.547]).scale(80000).translate([0, 0])
 
-  // 初始化城市数据
-  const initCity = () => {
-    areaPointArr = szJson.features.map((ele) => ({
-      name: ele.properties.name,
-      properties: { center: ele.properties.center },
-    }))
-    areaPointArrLen = areaPointArr.length
-  }
-
-  // 生成随机线段
-  const randomCity = () => {
-    const num0 = Math.floor(Math.random() * 7) // 生成 0-6 条线段
-    const arr = []
-    for (let i = 0; i < num0; i++) {
-      const [num1, num2] = getRandomTwoNumbers(areaPointArrLen - 1)
-      arr.push([
-        { ...areaPointArr[num1], time: getRandomNumber(23), staName: `场站(${2 * i})` },
-        { ...areaPointArr[num2], time: getRandomNumber(23), staName: `场站(${2 * i + 1})` },
-      ])
-    }
-
-    const str = `<div>生成${num0}条线段</div>${arr
-      .map((ele) => `<div>从${ele[0].name} ${ele[0].time}点 到${ele[1].name} ${ele[1].time}点</div>`)
-      .join('')}`
-    document.getElementById('desc').innerHTML = str
-
-    drawCity(arr)
+  const initStations = () => {
+    const stations = getAllStations()
+    setAllStationFlow(generateRandomRoutes(stations))
   }
 
   // 绘制城市
   const drawCity = (arr) => {
     if (sceneRef.current) {
-      clearScene() // 清除之前的场景内容
+      clearScene(true) // 清除之前的场景内容
     }
 
     const filterArr = arr
@@ -76,9 +54,18 @@ export default function Component() {
     newCylinders.forEach((cylinder) => sceneRef.current.add(cylinder))
     lastCylindersRef.current = newCylinders
 
-    // 绘制连接柱状体的线条
-    arr.forEach(([start, end]) => {
-      const curve = createCurveForCity(start, end, newCylinders)
+    if (acitveStationName.current) {
+      const flowArr = arr.filter(
+        (ele) => ele[0].name === acitveStationName.current || ele[1].name === acitveStationName.current
+      )
+      drawFlow(flowArr, newCylinders)
+    }
+  }
+
+  // 绘制连接柱状体的线条
+  const drawFlow = (flowArr, newCylinders) => {
+    flowArr.forEach(([start, end]) => {
+      const curve = createCurveForStation(start, end, newCylinders)
       if (curve) {
         sceneRef.current.add(curve)
         lastCurvesRef.current.push(curve)
@@ -97,7 +84,7 @@ export default function Component() {
   }
 
   // 创建贝塞尔曲线
-  const createCurveForCity = (start, end, newCylinders) => {
+  const createCurveForStation = (start, end, newCylinders) => {
     const startRedPoint = findRedPoint(start, newCylinders)
     const endRedPoint = findRedPoint(end, newCylinders)
     if (!startRedPoint || !endRedPoint) {
@@ -115,29 +102,37 @@ export default function Component() {
       endV.z - 50
     )
 
+    const color = start.staName === acitveStationName.current ? '#00f0af' : '#f000af'
     const curve = new THREE.CubicBezierCurve3(startV, v1, v2, endV)
     const tubeGeometry = new THREE.TubeGeometry(curve, 256, 2, 16, false)
-    const material = new THREE.MeshBasicMaterial({ color: '#ffffff' })
+    const material = new THREE.MeshBasicMaterial({ color })
 
     const mesh = new THREE.Mesh(tubeGeometry, material)
     // 为线条添加 userData，存储需要显示的文案信息
     mesh.userData = {
       type: 'line',
       info: `从 ${start.name}-${start.staName} ${start.time}点 到 ${end.name}-${end.staName} ${end.time}点`,
+      changeColor: true,
+      originColor: color,
+      activeColor: '#00ff00',
     }
     return mesh
   }
 
   // 清除场景
-  const clearScene = () => {
-    lastCylindersRef.current.forEach((cylinder) => sceneRef.current.remove(cylinder))
+  const clearScene = (clearCylinder = false) => {
+    if (clearCylinder) {
+      lastCylindersRef.current.forEach((cylinder) => sceneRef.current.remove(cylinder))
+    }
     lastCurvesRef.current.forEach((curve) => sceneRef.current.remove(curve))
     lastPointsRef.current.forEach((point) => {
       sceneRef.current.remove(point)
       gsap.killTweensOf(point.material.uniforms.uTime) // 清除动画
     })
 
-    lastCylindersRef.current = []
+    if (clearCylinder) {
+      lastCylindersRef.current = []
+    }
     lastCurvesRef.current = []
     lastPointsRef.current = []
   }
@@ -163,10 +158,70 @@ export default function Component() {
     )
   }
 
+  const pointerClickHandler = (scene, camera) => {
+    const raycaster = new THREE.Raycaster()
+    const pointer = new THREE.Vector2()
+
+    // 监听鼠标点击事件
+    const onPointerClick = (event) => {
+      pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+      // 通过摄像机和鼠标位置更新射线
+      raycaster.setFromCamera(pointer, camera)
+
+      // 获取所有对象的交集
+      const meshes = scene.children.filter((s) => s.type === 'Mesh' && s.userData?.type === 'cylinder')
+      const intersects = raycaster.intersectObjects(meshes, true)
+      if (intersects.length) {
+        // 检测是否点击了 CylinderGeometry 类型的对象
+        const clickedObject = intersects[0].object
+        // 你可以在这里做任何事情，比如改变颜色、显示信息等
+        const { staName } = clickedObject.userData
+
+        if (staName) {
+          // 先清除所有线条
+          clearScene(false)
+          // 清除所有颜色
+          for (let i = 0; i < meshes.length; i++) {
+            const mesh = meshes[i]
+            mesh.material.color.set(mesh.userData?.originColor)
+            mesh.userData.isActive = false
+          }
+        }
+
+        if (acitveStationName.current === staName) {
+          // clickedObject.userData.isActive = false
+          acitveStationName.current = ''
+          return
+        }
+
+        // 设置点击的Cylinder颜色
+        clickedObject.userData.isActive = true
+        clickedObject.material.color.set(clickedObject.userData?.activeColor)
+
+        acitveStationName.current = staName
+        const flowArr = allStationFlow.filter(
+          (ele) => ele[0].staName === acitveStationName.current || ele[1].staName === acitveStationName.current
+        )
+        drawFlow(flowArr, meshes)
+      }
+    }
+
+    window.addEventListener('click', onPointerClick)
+    return () => window.removeEventListener('click', onPointerClick)
+  }
+
+  useEffect(() => {
+    drawCity(allStationFlow)
+
+    const cleanupPointerClickHandler = pointerClickHandler(sceneRef.current, cameraRef.current)
+    return () => cleanupPointerClickHandler()
+  }, [allStationFlow])
+
   // 初始化 Three.js 场景
   useEffect(() => {
-    initCity()
-
+    initStations()
     // 渲染器
     const canvas = canvasRef.current
     rendererRef.current = new THREE.WebGLRenderer({ canvas })
@@ -180,16 +235,16 @@ export default function Component() {
     sceneRef.current = new THREE.Scene()
 
     // 光线
-    const ambLight = new THREE.AmbientLight('#ffffff', 0.3)
-    const spotLight = new THREE.SpotLight(0xffffff)
-    spotLight.position.set(40, 200, 10)
-    spotLight.castShadow = true
-    sceneRef.current.add(ambLight, spotLight)
+    // const ambLight = new THREE.AmbientLight('#ffffff', 0.3)
+    // const spotLight = new THREE.SpotLight(0xffffff)
+    // spotLight.position.set(40, 200, 10)
+    // spotLight.castShadow = true
+    // sceneRef.current.add(ambLight, spotLight)
 
     // GUI
     const { gui, folder } = initGui()
 
-    // 替换 Tween 为 gsap
+    // 一开始相机从远处移动到近处
     gsap.fromTo(
       cameraRef.current.position, // 动画的对象
       {
@@ -262,10 +317,21 @@ export default function Component() {
     <>
       <canvas ref={canvasRef} style={{ width: '100vw', height: '100vh', display: 'block' }} />
       <div id="info" className="info" />
-      <button className="btn" onClick={randomCity}>
-        点击我生成不同线段
+      <button className="btn" onClick={initStations}>
+        点击我生成不同站点之间的线路
       </button>
-      <div id="desc" className="desc" />
+      <div className="desc">
+        <div>
+          <span>生成</span>
+          <span>{allStationFlow.length}</span>
+          <span>条线段</span>
+        </div>
+        {allStationFlow.map((ele, index) => (
+          <div key={index}>
+            从{ele[0].staName} {ele[0].time}点 到{ele[1].staName} {ele[1].time}点
+          </div>
+        ))}
+      </div>
     </>
   )
 }

@@ -11,7 +11,7 @@ const ThreeCube2 = Loadable(() => import('@/pages/three/cube2'), {
 const ThreeMap = Loadable(() => import('@/pages/three/map'), {
   fallback: <Loading />,
 })
-const ThreeRotate = Loadable(() => import('@/pages/three/旋转'), {
+const ThreeMap1 = Loadable(() => import('@/pages/three/map1'), {
   fallback: <Loading />,
 })
 
@@ -29,8 +29,8 @@ const routes = [
     element: <ThreeMap />,
   },
   {
-    path: '/three/rotate',
-    element: <ThreeRotate />,
+    path: '/three/map1',
+    element: <ThreeMap1 />,
   },
 ]
 

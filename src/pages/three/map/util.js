@@ -24,6 +24,29 @@ export function getRandomTwoNumbers(n) {
   return [num1, num2]
 }
 
+// 获取所有站点
+export function getAllStations() {
+  return szJson.features.map((ele) => ({
+    name: ele.properties.name,
+    properties: { center: ele.properties.center },
+  }))
+}
+
+// 生成随机线段
+export const generateRandomRoutes = (allStations) => {
+  const num0 = Math.floor(Math.random() * 7) // 生成 0-6 条线段
+  const arr = []
+  for (let i = 0; i < num0; i++) {
+    const [num1, num2] = getRandomTwoNumbers(allStations.length - 1)
+    arr.push([
+      { ...allStations[num1], time: getRandomNumber(23), staName: `场站(${allStations[num1].name})` },
+      { ...allStations[num2], time: getRandomNumber(23), staName: `场站(${allStations[num2].name})` },
+    ])
+  }
+
+  return arr
+}
+
 export function initGui() {
   const gui = new GUI()
   const folder = gui.addFolder('系统设置')
@@ -74,8 +97,6 @@ export const handleData = ({ scene, gui, handleProj }) => {
 
     // 每个feature都代表一个省/市/区
     const province = new THREE.Object3D()
-    province.name = feature.properties.name
-    mapContainer.name = feature.properties.name
     const { coordinates } = feature.geometry // 坐标信息
     if (feature.geometry.type === 'MultiPolygon') {
       coordinates.forEach((coord) => {
@@ -130,7 +151,8 @@ export function pointerMoveHandler(scene, camera) {
   const pointer = new THREE.Vector2()
 
   // 鼠标放上去 改变颜色 显示地区名字
-  let activeIntersects = [] // 鼠标滑过数据
+  let lastChangeColorIntersects = [] // 上一次改变颜色的数据
+
   const onPointerMove = (event) => {
     const info = document.querySelector('#info')
     // 将鼠标位置归一化为设备坐标。x 和 y 方向的取值范围是 (-1 to +1)
@@ -140,60 +162,36 @@ export function pointerMoveHandler(scene, camera) {
     // 通过摄像机和鼠标位置更新射线
     raycaster.setFromCamera(pointer, camera)
 
-    // 判断数组是否有数据，有数据全部设置为原始数据
-    if (activeIntersects.length) {
-      for (let i = 0; i < activeIntersects.length; i++) {
-        const activeInsObj = activeIntersects[i].object
-        if (activeInsObj.userData?.info) {
-          // 线条
-          activeInsObj.material.color.set('#ffffff')
-        } else {
-          // 地图板块
-          activeInsObj.material.color.set('#d13a34')
+    // 上一次改变颜色的数据 恢复原始颜色
+    if (lastChangeColorIntersects.length) {
+      for (let i = 0; i < lastChangeColorIntersects.length; i++) {
+        const activeInsObj = lastChangeColorIntersects[i].object
+        if (!activeInsObj.userData.isActive) {
+          activeInsObj.material.color.set(activeInsObj.userData?.originColor)
         }
       }
     }
 
     // 计算物体和射线的焦点
     const obj3d = scene.children.filter((s) => s.type === 'Object3D')[0].children
-    const meshes = scene.children.filter((child) => child.type === 'Mesh') // 只选取 Mesh 对象
+    const meshes = scene.children.filter((s) => s.type === 'Mesh' && s.userData?.type)
     const intersects = raycaster.intersectObjects([...obj3d, ...meshes], true)
 
-    if (intersects.length) {
-      // 设置悬浮弹框的宽高
-      info.style.left = `${event.clientX}px`
-      info.style.top = `${event.clientY}px`
-      info.style.display = 'block'
+    info.style.display = 'none'
+    lastChangeColorIntersects = []
 
-      // 优先检测连接线条/柱状图
-      const lineIntersect = intersects.find((obj) => obj.object.isMesh && obj.object.userData?.type)
-      if (lineIntersect) {
-        // 显示连接线条的悬浮信息
-        info.innerHTML = lineIntersect.object.userData.info
-      } else {
-        // 显示地图板块的悬浮信息
-        // info.innerHTML = intersects[0].object.parent.name
-        info.style.display = 'none'
-      }
-
-      // 当碰撞到了CylinderGeometry和TextGeometry就不变颜色
-      const black = ['CylinderGeometry', 'TextGeometry']
-      const intersectsType = intersects.map((s) => s.object.geometry.type)
-      if (intersectsType.some((v) => black.includes(v))) {
-        return
-      }
-    } else {
-      info.style.display = 'none'
-    }
-
-    // 数组数据清空
-    activeIntersects = []
-
-    // 滑过的当前这个高亮
     for (let i = 0; i < intersects.length; i++) {
-      if (intersects[i].object.type === 'Mesh') {
-        intersects[i].object.material.color.set(0xff0000)
-        activeIntersects.push(intersects[i])
+      const element = intersects[i]
+      if (element.object.userData?.changeColor) {
+        element.object.material.color.set(element.object.userData?.activeColor)
+        lastChangeColorIntersects.push(element)
+      }
+      if (element.object.userData?.info) {
+        // 设置悬浮弹框的宽高
+        info.style.left = `${event.clientX}px`
+        info.style.top = `${event.clientY}px`
+        info.style.display = 'block'
+        info.innerHTML = element.object.userData.info
       }
     }
   }
@@ -314,7 +312,9 @@ const createExtrudeMesh = ({ coordinate, handleProj, folder }) => {
     .onChange((value) => material.color.set(value))
   folder.close()
 
-  return new THREE.Mesh(geometry, material)
+  const mesh = new THREE.Mesh(geometry, material)
+  mesh.userData = { type: 'extrude', changeColor: true, originColor: '#d13a34', activeColor: '#ff0000' }
+  return mesh
 }
 
 // 创建线条
@@ -368,6 +368,13 @@ export const createCylinder = ({ feature, handleProj }) => {
 
   points.forEach((point) => cylinder.add(point))
   cylinder.name = name
-  cylinder.userData = { type: 'cylinder', info: `${staName}` }
+  cylinder.userData = {
+    type: 'cylinder',
+    info: `${staName}`,
+    staName: `${staName}`,
+    changeColor: true,
+    originColor: '#0DEAF8',
+    activeColor: '#00a8F8',
+  }
   return cylinder
 }
