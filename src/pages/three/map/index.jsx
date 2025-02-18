@@ -273,12 +273,10 @@ export default function Component() {
     folder.add(axesHelper, 'visible').name('是否显示辅助线')
 
     // 动画循环
-    const animate = () => {
+    rendererRef.current.setAnimationLoop(() => {
       rendererRef.current.render(sceneRef.current, cameraRef.current)
-      requestAnimationFrame(animate)
       controls.update()
-    }
-    animate()
+    })
 
     // 窗口调整事件
     const cleanupResizeHandler = setupResizeHandler(rendererRef.current, cameraRef.current)
@@ -307,9 +305,6 @@ export default function Component() {
 
       // 清理 GSAP 动画
       gsap.globalTimeline.clear() // 清除所有 GSAP 动画
-      lastPointsRef.current.forEach((point) => {
-        gsap.killTweensOf(point.material.uniforms.uTime) // 停止特定动画
-      })
     }
   }, [])
 
