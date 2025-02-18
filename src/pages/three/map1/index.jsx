@@ -255,7 +255,7 @@ export default function Component() {
         </div>
         {allStationFlow.map((ele, index) => (
           <div key={index}>
-            从${ele[0].name} ${ele[0].time}点 到${ele[1].name} ${ele[1].time}点
+            从{ele[0].staName} {ele[0].time}点 到{ele[1].staName} {ele[1].time}点
           </div>
         ))}
       </div>

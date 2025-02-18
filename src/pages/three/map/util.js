@@ -245,7 +245,7 @@ export function createShaderMaterial() {
 
         uniform vec3 uColor; // 全局变量 颜色 设置的颜色
 
-        varying float vSize; // 片元变量（需要传递到片面着色器） 浮点 尺寸
+        varying float vSize; // 片元变量 传递到片元着色器的水滴大小
 
         uniform float uLength; // 全局变量 浮点 线段长度
 
@@ -271,6 +271,7 @@ export function createShaderMaterial() {
         void main(){
             // 透明度根据当前大小确定是否展示
             if(vSize<=0.0){
+             // 如果水滴大小为零，完全透明
               gl_FragColor = vec4(1,0,0,0);
             }else{
               gl_FragColor = vec4(uColor,1);
