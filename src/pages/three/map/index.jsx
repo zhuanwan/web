@@ -1,4 +1,5 @@
 /* eslint-disable react/no-array-index-key */
+// 深圳地图-场站-线条流动
 import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import { gsap } from 'gsap'
@@ -172,7 +173,8 @@ export default function Component() {
 
       // 获取所有对象的交集
       const meshes = scene.children.filter((s) => s.type === 'Mesh' && s.userData?.type === 'cylinder')
-      const intersects = raycaster.intersectObjects(meshes, true)
+      // 第二个参数为 false 只检查传入的对象数组中的对象,为true会检查传入对象及其所有子孙对象
+      const intersects = raycaster.intersectObjects(meshes, false)
       if (intersects.length) {
         // 检测是否点击了 CylinderGeometry 类型的对象
         const clickedObject = intersects[0].object
@@ -191,7 +193,6 @@ export default function Component() {
         }
 
         if (acitveStationName.current === staName) {
-          // clickedObject.userData.isActive = false
           acitveStationName.current = ''
           return
         }

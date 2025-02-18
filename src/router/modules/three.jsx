@@ -2,6 +2,9 @@ import Loadable from '@loadable/component'
 
 import Loading from '@/components/loading'
 
+const Three = Loadable(() => import('@/pages/three'), {
+  fallback: <Loading />,
+})
 const ThreeCube1 = Loadable(() => import('@/pages/three/cube1'), {
   fallback: <Loading />,
 })
@@ -16,6 +19,10 @@ const ThreeMap1 = Loadable(() => import('@/pages/three/map1'), {
 })
 
 const routes = [
+  {
+    path: '/three',
+    element: <Three />,
+  },
   {
     path: '/three/cube1',
     element: <ThreeCube1 />,

@@ -175,6 +175,7 @@ export function pointerMoveHandler(scene, camera) {
     // 计算物体和射线的焦点
     const obj3d = scene.children.filter((s) => s.type === 'Object3D')[0].children
     const meshes = scene.children.filter((s) => s.type === 'Mesh' && s.userData?.type)
+    // 第二个参数为 false 只检查传入的对象数组中的对象,为true会检查传入对象及其所有子孙对象
     const intersects = raycaster.intersectObjects([...obj3d, ...meshes], true)
 
     info.style.display = 'none'
