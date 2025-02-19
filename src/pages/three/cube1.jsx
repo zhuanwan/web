@@ -2,30 +2,14 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
+import { useResizeHandler, useThreeInit } from './util'
+
 export default function Component() {
   const canvasRef = useRef(null)
 
   const rendererRef = useRef(null)
   const cameraRef = useRef(null)
   const sceneRef = useRef(null)
-
-  const initThree = () => {
-    // 渲染器
-    const canvas = canvasRef.current
-    rendererRef.current = new THREE.WebGLRenderer({ canvas })
-
-    // 相机
-    cameraRef.current = new THREE.PerspectiveCamera(75, 1, 0.1, 1000)
-    cameraRef.current.position.set(0, 0, 10) // 调整相机位置
-
-    // 场景
-    sceneRef.current = new THREE.Scene()
-
-    // 添加光源
-    const light = new THREE.DirectionalLight(0xffffff, 1)
-    light.position.set(1, 1, 1).normalize()
-    sceneRef.current.add(light)
-  }
 
   const createCube = () => {
     // 材质（需要让立方体能够反射光，所以不使用MeshBasicMaterial，而用MeshPhongMaterial）
@@ -59,47 +43,15 @@ export default function Component() {
     })
   }
 
-  const cleanup = () => {
-    // 清理 Three.js 场景
-    sceneRef.current.traverse((object) => {
-      if (object.isMesh) {
-        object.geometry.dispose() // 释放几何体
-        if (object.material) {
-          if (Array.isArray(object.material)) {
-            object.material.forEach((material) => material.dispose()) // 释放材质
-          } else {
-            object.material.dispose()
-          }
-        }
-      }
-    })
-    sceneRef.current.clear() // 清空场景
-    rendererRef.current.dispose() // 释放渲染器
-  }
+  // 初始化 Three.js
+  useThreeInit({ canvasRef, rendererRef, cameraRef, sceneRef })
 
+  // resize handler
+  useResizeHandler({ rendererRef, cameraRef, sceneRef })
+
+  // 创建线条
   useEffect(() => {
-    initThree()
     createCube()
-    return () => {
-      cleanup()
-    }
-  }, [])
-
-  useEffect(() => {
-    const handleResize = () => {
-      const canvas = rendererRef.current.domElement
-
-      const width = canvas.clientWidth
-      const height = canvas.clientHeight
-      // 更新相机的纵横比
-      cameraRef.current.aspect = width / height
-      cameraRef.current.updateProjectionMatrix()
-      // 更新渲染器的尺寸
-      rendererRef.current.setSize(width, height, false)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   return (

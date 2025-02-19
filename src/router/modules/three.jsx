@@ -17,11 +17,27 @@ const ThreeMap = Loadable(() => import('@/pages/three/map'), {
 const ThreeMap1 = Loadable(() => import('@/pages/three/map1'), {
   fallback: <Loading />,
 })
-
+const ThreeCube3 = Loadable(() => import('@/pages/three/cube3'), {
+  fallback: <Loading />,
+})
+const ThreeLine1 = Loadable(() => import('@/pages/three/line1'), {
+  fallback: <Loading />,
+})
+const ThreeLight = Loadable(() => import('@/pages/three/light'), {
+  fallback: <Loading />,
+})
 const routes = [
   {
     path: '/three',
     element: <Three />,
+  },
+  {
+    path: '/three/map',
+    element: <ThreeMap />,
+  },
+  {
+    path: '/three/map1',
+    element: <ThreeMap1 />,
   },
   {
     path: '/three/cube1',
@@ -32,12 +48,16 @@ const routes = [
     element: <ThreeCube2 />,
   },
   {
-    path: '/three/map',
-    element: <ThreeMap />,
+    path: '/three/cube3',
+    element: <ThreeCube3 />,
   },
   {
-    path: '/three/map1',
-    element: <ThreeMap1 />,
+    path: '/three/line1',
+    element: <ThreeLine1 />,
+  },
+  {
+    path: '/three/light',
+    element: <ThreeLight />,
   },
 ]
 
