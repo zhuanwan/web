@@ -14,7 +14,23 @@ export default function Component() {
   const createObject = () => {
     // 1. 首先开启渲染器的阴影
     rendererRef.current.shadowMap.enabled = true
-    rendererRef.current.shadowMap.type = THREE.PCFSoftShadowMap // 使用更柔和的阴影
+
+    // 2. 添加环境光（让场景不会完全黑暗）
+    const ambientLight = new THREE.AmbientLight(0x404040)
+    sceneRef.current.add(ambientLight)
+
+    // 创建一个地面（只接收阴影）
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(10, 10),
+      new THREE.MeshStandardMaterial({
+        color: 0x886286,
+      })
+    )
+    ground.rotation.x = -Math.PI / 2
+    ground.position.y = -2 // 降低地面位置，确保其他物体在其上方
+    ground.castShadow = false // 地面不投射阴影
+    ground.receiveShadow = true // 地面接收阴影
+    sceneRef.current.add(ground)
 
     // 创建一个悬浮的球体（只投射阴影）
     const sphere = new THREE.Mesh(
@@ -26,15 +42,9 @@ export default function Component() {
     sphere.receiveShadow = false // 球体不接收阴影
     sceneRef.current.add(sphere)
 
-    // 创建一个地面（只接收阴影）
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), new THREE.MeshStandardMaterial({ color: 0x886286 }))
-    ground.rotation.x = -Math.PI / 2
-    ground.castShadow = false // 地面不投射阴影
-    ground.receiveShadow = true // 地面接收阴影
-    sceneRef.current.add(ground)
-
     // 创建一个盒子（既投射又接收阴影）
     const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0x00ff00 }))
+    box.position.x = -2
     box.castShadow = true // 盒子投射阴影
     box.receiveShadow = true // 盒子也接收阴影
     sceneRef.current.add(box)
