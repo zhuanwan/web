@@ -26,6 +26,9 @@ const ThreeLine1 = Loadable(() => import('@/pages/three/line1'), {
 const ThreeLight = Loadable(() => import('@/pages/three/light'), {
   fallback: <Loading />,
 })
+const ThreeCubeCamera = Loadable(() => import('@/pages/three/cubeCamera'), {
+  fallback: <Loading />,
+})
 const routes = [
   {
     path: '/three',
@@ -50,6 +53,10 @@ const routes = [
   {
     path: '/three/cube3',
     element: <ThreeCube3 />,
+  },
+  {
+    path: '/three/cubeCamera',
+    element: <ThreeCubeCamera />,
   },
   {
     path: '/three/line1',

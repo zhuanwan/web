@@ -25,6 +25,10 @@ const links = [
     path: '/three/light',
     name: '光源-阴影',
   },
+  {
+    path: '/three/cubeCamera',
+    name: '立方体相机',
+  },
 ]
 
 const Component = () => {
