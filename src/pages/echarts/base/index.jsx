@@ -1,7 +1,7 @@
 /**
  * 图表列表
  */
-import Echarts from 'echarts-for-react'
+import ReactECharts from 'echarts-for-react'
 
 import './index.less'
 
@@ -95,7 +95,7 @@ const Component = () => {
   return (
     <div className="charts">
       {/* 立方体对比柱形图 */}
-      <Echarts
+      <ReactECharts
         option={contrastBarChart({
           timeSlot: [
             '2023年1月',
@@ -124,10 +124,10 @@ const Component = () => {
       />
 
       {/* 百分比环形图 */}
-      <Echarts option={gradientPieChart({ percent: 60 })} style={{ height: '100px', width: '100px' }} />
+      <ReactECharts option={gradientPieChart({ percent: 60 })} style={{ height: '100px', width: '100px' }} />
 
       {/* 叠加立方体柱形图 */}
-      <Echarts
+      <ReactECharts
         option={overlayCubeBarChart({
           timeSlot: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00'],
           seriesData: [
@@ -158,13 +158,13 @@ const Component = () => {
       />
 
       {/* 矩形树图 */}
-      <Echarts option={treeMapChartConfig()} style={{ height: '300px', width: '600px' }} />
+      <ReactECharts option={treeMapChartConfig()} style={{ height: '300px', width: '600px' }} />
 
       {/* 百分比环形图 */}
-      <Echarts option={gradientPieChart({ percent: 60 })} style={{ height: '100px', width: '100px' }} />
+      <ReactECharts option={gradientPieChart({ percent: 60 })} style={{ height: '100px', width: '100px' }} />
 
       {/* 立方体柱形图 */}
-      <Echarts
+      <ReactECharts
         option={cubeBarChart({
           timeSlot: [
             '2023年1月',
@@ -189,7 +189,7 @@ const Component = () => {
         style={{ height: '300px', width: '1000px' }}
       />
       {/* 立方体柱形图 */}
-      <Echarts
+      <ReactECharts
         option={cubeBarChart({
           timeSlot: [
             '2023年1月',
@@ -215,7 +215,7 @@ const Component = () => {
         style={{ height: '300px', width: '1000px' }}
       />
       {/* 分时段柱形图 */}
-      <Echarts
+      <ReactECharts
         option={timePeriodBarChart({
           timeSlot: [
             '00:00',
