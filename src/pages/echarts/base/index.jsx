@@ -3,6 +3,8 @@
  */
 import Echarts from 'echarts-for-react'
 
+import './index.less'
+
 import {
   contrastBarChart,
   cubeBarChart,
@@ -12,9 +14,7 @@ import {
   redSeriesColors,
   timePeriodBarChart,
   treeMapChart,
-} from '@/utils/chart-config'
-
-import './index.less'
+} from './chart-config'
 
 const Component = () => {
   const treeMapList = [

@@ -2,6 +2,7 @@ import Loadable from '@loadable/component'
 
 import Loading from '@/components/loading'
 
+import echarts from './modules/echarts'
 import fabric from './modules/fabric'
 import postMessage from './modules/post-message'
 import three from './modules/three'
@@ -12,24 +13,14 @@ const NoMatch = Loadable(() => import('@/pages/404'), {
 const Layout = Loadable(() => import('@/pages'), {
   fallback: <Loading />,
 })
-// 图标列表
-const Charts = Loadable(() => import('@/pages/charts'), {
-  fallback: <Loading />,
-})
 
 const routes = [
   {
     path: '/',
     element: <Layout />,
-    children: [
-      {
-        path: 'charts',
-        element: <Charts />,
-        name: '图标列表',
-      },
-    ],
   },
   ...postMessage,
+  ...echarts,
   ...fabric,
   ...three,
   { path: '*', element: <NoMatch /> },
