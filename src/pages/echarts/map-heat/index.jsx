@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 
+import mapBg from './bg.jpg'
 import szJson from './深圳市.json'
 
 const Component = () => {
@@ -29,28 +30,42 @@ const Component = () => {
           color: '#fff',
         },
       },
-      geo: {
-        map: 'szMap',
-        label: {
-          emphasis: {
-            show: true,
-            color: '#fff',
+      geo: [
+        {
+          map: 'szMap',
+          zlevel: 1,
+          label: {
+            emphasis: {
+              show: true,
+              color: '#fff',
+            },
+          },
+          roam: true,
+          itemStyle: {
+            normal: {
+              areaColor: 'rgba(50, 60, 72, 0.5)',
+              borderColor: '#fff',
+            },
+            emphasis: {
+              areaColor: 'rgba(117, 200, 255, 0.5)',
+            },
           },
         },
-        roam: true,
-        itemStyle: {
-          normal: {
-            areaColor: '#323c48',
-            borderColor: '#111',
-          },
-          emphasis: {
-            areaColor: '#2a333d',
+        {
+          map: 'szMap',
+          zlevel: 0,
+          itemStyle: {
+            areaColor: {
+              image: mapBg, // 背景图
+              repeat: 'no-repeat',
+            },
           },
         },
-      },
+      ],
 
       series: [
         {
+          zlevel: 2,
           type: 'heatmap',
           coordinateSystem: 'geo',
           data: szJson.features.map((ele) => {
