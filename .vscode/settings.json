@@ -4,9 +4,13 @@
         "source.fixAll.eslint": "explicit",
         "source.fixAll.stylelint": "explicit"
     },
+    "stylelint.validate": ["less"],
+    "eslint.validate": ["react"],
     "json.schemas": [
         {
             "$schema": "https://json.schemastore.org/jsconfig"
         }
-    ]
+    ],
+    "i18n-ally.localesPaths": ["src/i18n"],
+    "Lingma.methodQuickOperation": false
 }

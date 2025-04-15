@@ -1,9 +1,12 @@
 import ReactDOM from 'react-dom/client'
-import { ConfigProvider } from 'antd'
+import { Provider } from 'react-redux'
+import { App, ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import dayjs from 'dayjs'
 
+import AppProvider from '@/components/app-provider'
 import RouterComponent from '@/router/routerComponent'
+import store from '@/store'
 
 import 'dayjs/locale/zh-cn'
 import '@/less/index.less'
@@ -27,7 +30,13 @@ if (styles.color === 'rgb(255, 0, 0)') {
         },
       }}
     >
-      <RouterComponent />
+      <App>
+        <AppProvider>
+          <Provider store={store}>
+            <RouterComponent />
+          </Provider>
+        </AppProvider>
+      </App>
     </ConfigProvider>
   )
 }
