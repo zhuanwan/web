@@ -3,11 +3,20 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 
-import fontJson from './YouSheBiaoTiHei_Regular.json'
+// import fontJson from './YouSheBiaoTiHei_Regular.json'
 import szJson from './深圳市.json'
 
-const fontLoad = new FontLoader()
-const font = fontLoad.parse(fontJson)
+const fontLoader = new FontLoader()
+
+// const font = fontLoader.parse(fontJson)
+
+let font = null // 存储加载后的字体对象
+
+// 改成引用cdn地址https://zhuanwan.github.io/web/YouSheBiaoTiHei_Regular.json
+// 提前加载字体（建议在应用初始化时调用）
+fontLoader.load('https://zhuanwan.github.io/web/YouSheBiaoTiHei_Regular.json', (loadedFont) => {
+  font = loadedFont // 加载完成后赋值
+})
 
 // 从 0 到 n 随机一个数
 export function getRandomNumber(n) {

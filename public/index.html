@@ -1,39 +1,42 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>web</title>
+    <link rel="stylesheet" href="https://unpkg.com/antd@5.19.2/dist/reset.css" />
+    <link rel="stylesheet" href="https://unpkg.com/antd@5.19.2/dist/antd.min.css" />
     <style>
-        #root-tips {
-            margin-top: 100px;
-            font-size: 20px;
-            text-align: center;
-            color: red;
-        }
+      #root-tips {
+        margin-top: 100px;
+        font-size: 20px;
+        text-align: center;
+        color: red;
+      }
 
-        :where(#root-tips a) {
-            color: blue;
-        }
+      :where(#root-tips a) {
+        color: blue;
+      }
     </style>
-</head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+  </head>
 
-<body>
+  <body>
     <div id="root-tips"><a></a></div>
     <div id="root"></div>
 
     <script>
-        function isIE() {
-            if (!!window.ActiveXObject || 'ActiveXObject' in window) return true;
-            return false;
-        }
-        if (isIE()) {
-            document.getElementById('root-tips').innerHTML = '该系统不兼容IE浏览器，请更换浏览器访问。';
-        }
+      function isIE() {
+        if (!!window.ActiveXObject || 'ActiveXObject' in window) return true
+        return false
+      }
+      if (isIE()) {
+        document.getElementById('root-tips').innerHTML = '该系统不兼容IE浏览器，请更换浏览器访问。'
+      }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-</body>
-
+  </body>
 </html>
