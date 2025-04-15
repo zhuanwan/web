@@ -15,6 +15,7 @@ import {
   generateRandomRoutes,
   getAllStations,
   handleData,
+  initFont,
   initGui,
   pointerMoveHandler,
   setupResizeHandler,
@@ -223,6 +224,7 @@ export default function Component() {
   // 初始化 Three.js 场景
   useEffect(() => {
     initStations()
+
     // 渲染器
     const canvas = canvasRef.current
     rendererRef.current = new THREE.WebGLRenderer({ canvas })
@@ -262,7 +264,12 @@ export default function Component() {
       }
     )
     // 处理地图数据
-    handleData({ scene: sceneRef.current, gui, handleProj })
+    // handleData({ scene: sceneRef.current, gui, handleProj })
+
+    initFont().then(
+      () => handleData({ scene: sceneRef.current, gui, handleProj })
+      // 处理地图数据
+    )
 
     // 轨道控制器
     const controls = new OrbitControls(cameraRef.current, rendererRef.current.domElement)

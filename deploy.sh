@@ -22,4 +22,4 @@ git add .
 
 git commit -m $1
 
-git push origin master:master # 推到github上
+git push origin master:mater # 推到github上
