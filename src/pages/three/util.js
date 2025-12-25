@@ -40,8 +40,9 @@ export const useThreeInit = ({ canvasRef, rendererRef, cameraRef, sceneRef }) =>
 
     // 相机
     const aspect = canvas.clientWidth / canvas.clientHeight
-    cameraRef.current = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000)
+    cameraRef.current = new THREE.PerspectiveCamera(75, aspect, 1, 200)
     cameraRef.current.position.set(0, 0, 10)
+    cameraRef.current.lookAt(new THREE.Vector3(0, 0, 0))
 
     // 场景
     sceneRef.current = new THREE.Scene()

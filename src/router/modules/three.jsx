@@ -11,13 +11,16 @@ const ThreeCube1 = Loadable(() => import('@/pages/three/cube1'), {
 const ThreeCube2 = Loadable(() => import('@/pages/three/cube2'), {
   fallback: <Loading />,
 })
+const ThreeCube3 = Loadable(() => import('@/pages/three/cube3'), {
+  fallback: <Loading />,
+})
+const ThreeCube4 = Loadable(() => import('@/pages/three/cube4'), {
+  fallback: <Loading />,
+})
 const ThreeMap = Loadable(() => import('@/pages/three/map'), {
   fallback: <Loading />,
 })
 const ThreeMap1 = Loadable(() => import('@/pages/three/map1'), {
-  fallback: <Loading />,
-})
-const ThreeCube3 = Loadable(() => import('@/pages/three/cube3'), {
   fallback: <Loading />,
 })
 const ThreeLine1 = Loadable(() => import('@/pages/three/line1'), {
@@ -53,6 +56,10 @@ const routes = [
   {
     path: '/three/cube3',
     element: <ThreeCube3 />,
+  },
+  {
+    path: '/three/cube4',
+    element: <ThreeCube4 />,
   },
   {
     path: '/three/cubeCamera',

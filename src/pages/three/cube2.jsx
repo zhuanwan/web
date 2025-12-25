@@ -26,6 +26,7 @@ export default function Component() {
     const material2 = new THREE.MeshPhongMaterial({ color: 0x0000ff })
     const cube2 = new THREE.Mesh(geometry, material2)
     cube2.userData.type = 'cube2'
+    // sceneRef.current.add(cube2)
     cube1.add(cube2)
 
     const cube3 = new THREE.Mesh(geometry, material)
@@ -50,17 +51,22 @@ export default function Component() {
   const pointerClickHandler = (scene, camera) => {
     const raycaster = new THREE.Raycaster()
     const pointer = new THREE.Vector2()
+    const canvas = rendererRef.current?.domElement
+    if (!canvas) return
 
     // 监听鼠标点击事件
     const onPointerClick = (event) => {
-      pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+      // pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+      // pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+      const rect = canvas.getBoundingClientRect()
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
 
       // 通过摄像机和鼠标位置更新射线
       raycaster.setFromCamera(pointer, camera)
       // 获取所有对象的交集
       const meshes = scene.children.filter((s) => s.type === 'Mesh')
-      console.log('meshes', meshes)
+      // console.log('meshes', meshes)
       // 第二个参数为 false 只检查传入的对象数组中的对象,为true会检查传入对象及其所有子孙对象
       const intersects = raycaster.intersectObjects(meshes, false)
 
@@ -68,6 +74,8 @@ export default function Component() {
       if (intersects.length) {
         // 检测是否点击了 CylinderGeometry 类型的对象
         for (let i = 0; i < intersects.length; i++) {
+          console.log('object', i, intersects[i].object)
+          console.log('point', i, intersects[i].point)
           console.log(i, intersects[i].object.userData.type)
         }
       }

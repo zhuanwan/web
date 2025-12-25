@@ -13,6 +13,10 @@ const links = [
     path: '/three/cube3',
     name: '立方体-关键帧动画',
   },
+    {
+    path: '/three/cube4',
+    name: '立方体-层级旋转',
+  },
   {
     path: '/three/line1',
     name: '线条',
