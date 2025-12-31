@@ -15,6 +15,9 @@ export default function Component() {
   const sceneRef = useRef(null)
 
   const createObject = () => {
+    // HDR 的亮度值非常大,屏幕只能显示 0~1,
+    // ToneMapping 的作用是：把“超亮的物理光照”压缩成人眼舒服的颜色
+    // ACESFilmic 是：电影工业常用/最自然的一种
     rendererRef.current.toneMapping = THREE.ACESFilmicToneMapping
 
     // 修改立方体贴图渲染目标的设置
@@ -80,12 +83,13 @@ export default function Component() {
     new RGBELoader().load(quarry_01_1kHdr, function (texture) {
       texture.mapping = THREE.EquirectangularReflectionMapping
 
-      sceneRef.current.background = texture
-      sceneRef.current.environment = texture
+      sceneRef.current.background = texture // 把 HDR 贴图作为“天空盒”
+      sceneRef.current.environment = texture // 把 HDR 作为“全局环境光源”
+      // rendererRef.current.render(sceneRef.current, cameraRef.current)
     })
 
     cameraRef.current.position.z = 70
-
+  
     createObject()
   }, [])
 
