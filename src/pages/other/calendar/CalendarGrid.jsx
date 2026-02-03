@@ -81,7 +81,7 @@ const CalendarGrid = ({ days, onDayClick, small = false }) => {
                     className={twMerge(
                       small
                         ? 'flex flex-row items-center gap-1 px-1 leading-none'
-                        : 'flex flex-row items-center px-2 py-0.5 rounded-md bg-[#ffeaea] border border-[#ffd6d6]'
+                        : 'flex flex-row items-center gap-1 px-2 py-0.5 rounded-md bg-[#ffeaea] border border-[#ffd6d6]'
                     )}
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-[#FF3B30] shrink-0" />
@@ -102,7 +102,7 @@ const CalendarGrid = ({ days, onDayClick, small = false }) => {
                     className={twMerge(
                       small
                         ? 'flex items-center gap-1 px-1 leading-none'
-                        : 'flex items-center px-2 py-0.5 rounded-md bg-[#eaf3ff] border border-[#d6e9ff]'
+                        : 'flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#eaf3ff] border border-[#d6e9ff]'
                     )}
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF] shrink-0" />
