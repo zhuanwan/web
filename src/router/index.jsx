@@ -6,6 +6,7 @@ import echarts from './modules/echarts'
 import fabric from './modules/fabric'
 import postMessage from './modules/post-message'
 import three from './modules/three'
+import other from './modules/other'
 
 const NoMatch = Loadable(() => import('@/pages/404'), {
   fallback: <Loading />,
@@ -23,6 +24,7 @@ const routes = [
   ...echarts,
   ...fabric,
   ...three,
+  ...other,
   { path: '*', element: <NoMatch /> },
 ]
 

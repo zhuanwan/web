@@ -12,6 +12,7 @@ import 'dayjs/locale/zh-cn'
 import '@/less/index.less'
 
 import 'antd/dist/reset.css'
+import '@/styles/tailwind.css'
 
 dayjs.locale('zh-cn')
 
